@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import tw from 'twrnc';
 
-function Switalski() {
+function Kozakowski() {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={tw`pt-6 bg-blue-100`}>
       <Text>Component 1</Text>
     </View>
   );
 }
 
-export default Switalski;
+export default Kozakowski;

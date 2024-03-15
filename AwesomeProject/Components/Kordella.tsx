@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-function Kozakowski() {
+function Kordella() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Component 1</Text>
@@ -9,4 +9,4 @@ function Kozakowski() {
   );
 }
 
-export default Kozakowski;
+export default Kordella;
