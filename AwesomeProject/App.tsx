@@ -9,13 +9,16 @@ import Switalski from './Components/Switalski';
 import Zelazkiewicz from './Components/Zelazkiewicz';
 import Mrowinski from './Components/Mrowinski';
 import HomeScreen from './Components/HomeScreen';
+import { CustomDarkTheme, CustomLightTheme } from './Components/Theme'; 
 
 const Stack = createNativeStackNavigator();
+
+
 
 function App() {
   const scheme = useColorScheme();
   return (
-    <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <NavigationContainer theme={scheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Welcome' }} />
         <Stack.Screen name="Kozakowski" component={Kozakowski} />
