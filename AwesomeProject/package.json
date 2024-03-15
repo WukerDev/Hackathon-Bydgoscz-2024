@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@ernestbies/react-native-android-sms-listener": "^1.0.2",
+    "@react-navigation/bottom-tabs": "^6.5.19",
     "@react-navigation/native": "^6.1.16",
     "@react-navigation/native-stack": "^6.9.25",
     "@rneui/base": "^4.0.0-rc.7",

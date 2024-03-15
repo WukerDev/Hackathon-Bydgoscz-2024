@@ -10,24 +10,24 @@ import Zelazkiewicz from './Components/Zelazkiewicz';
 import Mrowinski from './Components/Mrowinski';
 import HomeScreen from './Components/HomeScreen';
 import { CustomDarkTheme, CustomLightTheme } from './Components/Theme'; 
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-const Stack = createNativeStackNavigator();
 
-
+const Tab = createBottomTabNavigator();
 
 function App() {
   const scheme = useColorScheme();
   return (
     <NavigationContainer theme={scheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Welcome' }} />
-        <Stack.Screen name="Kozakowski" component={Kozakowski} />
-        <Stack.Screen name="Jacoszek" component={Jacoszek} />
-        <Stack.Screen name="Kordella" component={Kordella} />
-        <Stack.Screen name="Switalski" component={Switalski} />
-        <Stack.Screen name="Zelazkiewicz" component={Zelazkiewicz} />
-        <Stack.Screen name="Mrowinski" component={Mrowinski} />
-      </Stack.Navigator>
+      <Tab.Navigator initialRouteName="Home">
+        <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Welcome' }} />
+        <Tab.Screen name="Kozakowski" component={Kozakowski} options={{ title: 'Kozakowski' }} />
+        <Tab.Screen name="Jacoszek" component={Jacoszek} options={{ title: 'Jacoszek' }} />
+        <Tab.Screen name="Kordella" component={Kordella} options={{ title: 'Kordella' }} />
+        <Tab.Screen name="Switalski" component={Switalski} options={{ title: 'Switalski' }} />
+        <Tab.Screen name="Zelazkiewicz" component={Zelazkiewicz} options={{ title: 'Zelazkiewicz' }} />
+        <Tab.Screen name="Mrowinski" component={Mrowinski} options={{ title: 'Mrowinski' }} />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
