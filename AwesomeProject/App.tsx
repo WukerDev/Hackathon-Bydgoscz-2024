@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useColorScheme } from 'react-native';
 import Kozakowski from './Components/Kozakowski';
 import Jacoszek from './Components/Jacoszek';
 import Kordella from './Components/Kordella';
@@ -12,8 +13,9 @@ import HomeScreen from './Components/HomeScreen';
 const Stack = createNativeStackNavigator();
 
 function App() {
+  const scheme = useColorScheme();
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Welcome' }} />
         <Stack.Screen name="Kozakowski" component={Kozakowski} />
