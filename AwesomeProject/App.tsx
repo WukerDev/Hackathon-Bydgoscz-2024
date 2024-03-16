@@ -446,7 +446,7 @@ function App() {
     // Change the state after 5 seconds
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 5000);
+    }, 4000);
 
     return () => clearTimeout(timer);
   }, []);

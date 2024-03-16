@@ -138,6 +138,15 @@ const Switalski = () => {
   if (!shouldContinue) {
     return null;
   }
+  const handleRatingChange = (rating: number, index: number) => {
+    const updatedSmsList = smsList.map((sms, smsIndex) => {
+      if (smsIndex === index) {
+        return { ...sms, dangerLevel: rating };
+      }
+      return sms;
+    });
+    setSmsList(updatedSmsList);
+  };
   const [selectedRating, setSelectedRating] = useState(2);
   return (
     <View style={tw`flex-1 items-center justify-center w-full`}>
@@ -149,9 +158,10 @@ const Switalski = () => {
         </View>
       )}
 
-      <ScrollView style={tw`w-full pb-4 pr-4 pl-4`}>
+<ScrollView style={tw`w-full pb-4 pr-4 pl-4`}>
         {smsList.map((sms, index) => (
           <View key={index} style={[tw`mt-2 rounded p-4 flex-row justify-between relative`,{color: theme.colors.text, backgroundColor: theme.colors.buttonBackground}]}>
+            
             <View style={tw`w-4/6`}>
               <Text style={tw`text-xl`}>{sms.address}</Text>
               <Text numberOfLines={2} ellipsizeMode="tail" style={tw`text-base`}>{sms.body}</Text>
@@ -160,7 +170,7 @@ const Switalski = () => {
             <View style={tw`absolute top-5 right-2`}>
               <StarRating
                 rating={sms.dangerLevel}
-                onRatingChange={(rating) => setSelectedRating(rating)}
+                onRatingChange={(rating) => handleRatingChange(rating, index)}
               />
             </View>
             <View style={tw`absolute bottom-3 w-26 right-4`}>
