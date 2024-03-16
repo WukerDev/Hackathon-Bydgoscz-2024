@@ -39,18 +39,18 @@ function App() {
   const scheme = useColorScheme();
   return (
     <NavigationContainer theme={scheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
-      <Tab.Navigator initialRouteName="Home">
+      <Tab.Navigator initialRouteName="Home" >
       <Tab.Screen 
           name="Home" 
           component={HomeScreen} 
           options={{
-            title: 'Strona Główna',
+            title: 'Strona Główna', tabBarLabel: undefined,
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="home" color={color} size={size} />
             ),
           }} 
         />
-         <Tab.Screen name="Nadzór Wiadomości" component={Switalski} options={{ title: 'Nadzór Wiadomości',
+         <Tab.Screen name="Nadzór Wiadomości" component={Switalski} options={{ title: 'Nadzór Wiadomości', 
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="message" color={color} size={size} />
             ), }} />
