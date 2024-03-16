@@ -2,6 +2,9 @@ import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import { useColorScheme } from 'react-native';
+import { CustomDarkTheme, CustomLightTheme } from './Theme';
+
 const { width } = Dimensions.get('window');
 const buttonSize = width / 2; // To make them square and fit 2 per row.
 
@@ -17,36 +20,50 @@ interface IconButtonProps {
   onPress: () => void; // Simplified onPress type for demonstration
 }
 
-const IconButton: React.FC<IconButtonProps> = ({ title, iconName, onPress }) => (
-  <TouchableOpacity style={[styles.button, { height: buttonSize - 10 }]} onPress={onPress}>
-    <Text style={styles.buttonText}>{title}</Text>
-    <Icon name={iconName} size={60} color="#fff" />
-  </TouchableOpacity>
-);
+const IconButton: React.FC<IconButtonProps> = ({ title, iconName, onPress }) => {
+  const scheme = useColorScheme();
+  const theme = scheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
+
+  return (
+    <TouchableOpacity
+      style={[
+        b_styles.button,
+        { backgroundColor: theme.colors.buttonBackground, height: buttonSize - 10 },
+      ]}
+      onPress={onPress}
+    >
+      <Text style={[b_styles.buttonText, { color: theme.colors.text }]}>{title}</Text>
+      <Icon name={iconName} size={60} color={theme.colors.primary} />
+    </TouchableOpacity>
+  );
+};
+
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
+  const theme = useColorScheme();
+  const styles = theme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   const buttons: IconButtonProps[] = [
-    { title: 'One', iconName: 'home', onPress: () => console.log('Pressed One') },
-    { title: 'Two', iconName: 'account', onPress: () => console.log('Pressed Two') },
-    { title: 'Three', iconName: 'bell', onPress: () => console.log('Pressed Three') },
-    { title: 'Four', iconName: 'camera', onPress: () => console.log('Pressed Four') },
-    { title: 'Five', iconName: 'card', onPress: () => console.log('Pressed Five') },
-    { title: 'Six', iconName: 'email', onPress: () => console.log('Pressed Six') },
+    { title: 'Ostatnio wykryte', iconName: 'message', onPress: () => console.log('Pressed One') },
+    { title: 'Ważne', iconName: 'alert', onPress: () => console.log('Pressed Two') },
+    { title: 'FAQ', iconName: 'question', onPress: () => console.log('Pressed Three') },
+    { title: 'Zablokowane', iconName: 'block-helper', onPress: () => console.log('Pressed Four') },
+    { title: 'Aktualizacje', iconName: 'download', onPress: () => console.log('Pressed Five') },
+    { title: 'Konto premium', iconName: 'key-variant', onPress: () => console.log('Pressed Six') },
   ];
 
   return (
-    <View style={styles.container}>
-      <View style={styles.row}>
+    <View style={b_styles.container}>
+      <View style={b_styles.row}>
         {buttons.slice(0, 2).map((button, index) => (
           <IconButton key={index} {...button} />
         ))}
       </View>
-      <View style={styles.row}>
+      <View style={b_styles.row}>
         {buttons.slice(2, 4).map((button, index) => (
           <IconButton key={index} {...button} />
         ))}
       </View>
-      <View style={styles.row}>
+      <View style={b_styles.row}>
         {buttons.slice(4, 6).map((button, index) => (
           <IconButton key={index} {...button} />
         ))}
@@ -55,15 +72,15 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const b_styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column-reverse', // Reverse column order
+    flexDirection: 'column', // Reverse column order
     alignItems: 'center',
     justifyContent: 'space-around', // Evenly space out the rows
   },
   row: {
-    flexDirection: 'row-reverse', // Reverse row order
+    flexDirection: 'row', // Reverse row order
     justifyContent: 'space-around', // Evenly space out the buttons
     width: '100%',
   },
@@ -71,7 +88,6 @@ const styles = StyleSheet.create({
     width: buttonSize - 10, // Subtracting 10 for some padding
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#007bff',
     margin: 5,
     borderRadius: 5,
   },

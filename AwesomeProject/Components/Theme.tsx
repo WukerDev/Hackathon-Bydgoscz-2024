@@ -9,6 +9,7 @@ export const CustomDarkTheme = {
     card: '#232323',
     text: '#EEE',
     primary: '#EEE',
+    buttonBackground: '#292929',
     // Customize other colors as needed
   },
 };
@@ -22,6 +23,7 @@ export const CustomLightTheme = {
     card: '#E8E6E4',
     text: '#343434',
     primary: '#343434',
+    buttonBackground: '#E8E6E4',
     // Add or override other color properties as needed
   },
 };
