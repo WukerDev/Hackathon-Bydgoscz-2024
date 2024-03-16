@@ -8,7 +8,7 @@ import Jacoszek from './Components/Jacoszek';
 import Kordella from './Components/Kordella';
 import Zelazkiewicz from './Components/Zelazkiewicz';
 import Mrowinski from './Components/Mrowinski';
-
+import Switalski from './Components/Switalski';
 import { CustomDarkTheme, CustomLightTheme } from './Components/Theme'; 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -31,7 +31,7 @@ function App() {
             ),
           }} 
         />
-         <Tab.Screen name="Messages" component={Messages} options={{ title: 'Messages',
+         <Tab.Screen name="Messages" component={Switalski} options={{ title: 'Messages',
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="message" color={color} size={size} />
             ), }} />
@@ -39,7 +39,10 @@ function App() {
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="settings" color={color} size={size} />
             ), }} />
-        <Tab.Screen name="Jacoszek" component={Jacoszek} />
+        <Tab.Screen name="SecurityAssistant" component={Jacoszek} options={{ title: 'Security Assistant',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialIcons name="security" color={color} size={size} />
+            ), }} />
         <Tab.Screen name="Kordella" component={Kordella} />
         <Tab.Screen name="Zelazkiewicz" component={Zelazkiewicz} />
         <Tab.Screen name="Mrowinski" component={Mrowinski} />
