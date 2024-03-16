@@ -3,9 +3,18 @@ import { View, Button, StyleSheet, Text } from 'react-native'; // Dodajemy Text
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 
+
+import { CustomDarkTheme, CustomLightTheme } from './Theme';
+import { useColorScheme } from 'react-native';
+import { color } from '@rneui/base';
+
+import { Composer } from 'react-native-gifted-chat';
+
 const CHAT_HISTORY_KEY = '@chat_history';
 
 const Chat: React.FC = () => {
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [loadingMessage, setLoadingMessage] = useState<string>(''); // Dodajemy stan dla aktualnej wiadomości ładowania
 
@@ -101,6 +110,16 @@ const Chat: React.FC = () => {
       setLoadingMessage(''); // Czyścimy wiadomość ładowania w przypadku błędu
     }
   };
+
+  const renderComposer = (props: any) => (
+    <Composer
+      {...props}
+      textInputStyle={{
+        color: theme.colors.background,
+      }}
+    />
+  );
+
 
   return (
     <View style={{ flex: 1 }}>
