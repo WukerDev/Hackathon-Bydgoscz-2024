@@ -8,7 +8,7 @@ export const CustomDarkTheme = {
     background: '#121212',
     card: '#232323',
     text: '#FFF',
-    accent: '#FF0000',
+    accent: '#CC2020',
     tile: '#1E1E1E',
     subTile: '#2B2B2B',
     icon: '#FFF',
