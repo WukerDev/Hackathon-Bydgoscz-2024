@@ -4,6 +4,9 @@ import SmsListener from '@ernestbies/react-native-android-sms-listener';
 import SmsAndroid from "react-native-get-sms-android";
 import { Linking } from 'react-native';
 
+import { CustomDarkTheme, CustomLightTheme } from './Theme';
+import { useColorScheme } from 'react-native';
+
 import tw from 'twrnc';
 
 let shouldContinue = true;
@@ -81,6 +84,8 @@ async function requestReadSmsPermission() {
 }
 
 const Switalski = () => {
+  const currentTheme = useColorScheme();
+  const theme = currentTheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   const [smsList, setSmsList] = useState<SmsAndroidMessage[]>([]);
   const [receivedMessage, setReceivedMessage] = useState<SmsMessage | null>(null);
   
@@ -135,7 +140,7 @@ const Switalski = () => {
       <Text style={tw`text-lg font-bold`}>SMS List:</Text>
       <ScrollView style={tw`mt-4 w-full p-4`}>
         {smsList.map((sms, index) => (
-          <View key={index} style={tw`mt-2 bg-gray-200 rounded p-4 flex-row justify-between items-center`}>
+          <View key={index} style={[tw`mt-2 rounded p-4 flex-row justify-between items-center`, {backgroundColor: theme.colors.buttonBackgroundr}]}>
             <View style={tw`w-4/6`}>
               <Text style={tw`text-xl`}>{sms.address}</Text>
               <Text style={tw`text-base`}>{sms.body}</Text>

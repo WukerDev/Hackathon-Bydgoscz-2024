@@ -3,9 +3,18 @@ import { View, Button, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 
+
+import { CustomDarkTheme, CustomLightTheme } from './Theme';
+import { useColorScheme } from 'react-native';
+import { color } from '@rneui/base';
+
+import { Composer } from 'react-native-gifted-chat';
+
 const CHAT_HISTORY_KEY = '@chat_history';
 
 const Chat: React.FC = () => {
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   const [messages, setMessages] = useState<IMessage[]>([]);
 
   useEffect(() => {
@@ -96,6 +105,16 @@ const Chat: React.FC = () => {
     }
   };
 
+  const renderComposer = (props: any) => (
+    <Composer
+      {...props}
+      textInputStyle={{
+        color: theme.colors.background,
+      }}
+    />
+  );
+
+
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.newChatButton}>
@@ -107,6 +126,7 @@ const Chat: React.FC = () => {
         onSend={(messagesToSend: IMessage[]) => onSend(messagesToSend)}
         user={{ _id: 1 }}
         renderFooter={() => null} // Typing indicator managed via isTyping prop
+        renderComposer={renderComposer}
       />
     </View>
   );
