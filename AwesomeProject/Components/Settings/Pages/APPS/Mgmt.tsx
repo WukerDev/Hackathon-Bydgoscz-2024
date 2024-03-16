@@ -5,14 +5,15 @@ import { CustomDarkTheme,CustomLightTheme } from '../../../Theme';
 import { useColorScheme } from 'react-native';
 import { StyleSheet } from 'react-native';
 
-const Security: React.FC = () => {
+const Mgmt: React.FC = () => {
     const scheme = useColorScheme();
     const theme = scheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
     return (
         <View style={[style.ViewMain]}>
-            <Icon name="shield-lock" size={80} color={theme.colors.primary} />
-            <Text style={{color: theme.colors.text, fontSize: 30}}>Twoje konto wygląda OK!</Text>
-            <Text style={{color: theme.colors.text, fontSize: 20}}>Wróc tu później, aby zobaczyć więcej informacji.</Text>
+            <Icon name="owl" size={80} color={theme.colors.primary} />
+            <Text style={{color: theme.colors.text, fontSize: 30}}>Połączone Aplikacje</Text>
+            <Text style={{color: theme.colors.text, fontSize: 20}}>Tu będzie można połączyć OwlGuard</Text>
+            <Text style={{color: theme.colors.text, fontSize: 20}}>z innymi aplkacjami!</Text>
         </View>
     );
 };
@@ -26,4 +27,4 @@ const style = StyleSheet.create({
     }
 });
 
-export default Security;
+export default Mgmt;
