@@ -144,7 +144,7 @@ const Chat: React.FC = () => {
 const styles = StyleSheet.create({
   newChatButton: {
     padding: 10,
-    paddingTop: 20, // Dodajemy odstęp na górze, aby przycisk nie nakładał się na animację ładowania
+
   },
   loadingIndicator: {
     justifyContent: 'center',
