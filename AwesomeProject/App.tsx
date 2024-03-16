@@ -439,6 +439,7 @@ const checkForLinks = (message: string): void => {
 const Tab = createBottomTabNavigator();
 
 function App() {
+  Mrowinski();
   const [isLoading, setIsLoading] = useState(true); // Loading state
   const scheme = useColorScheme(); // Use color scheme for theme
 
