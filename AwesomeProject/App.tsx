@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer} from '@react-navigation/native';
 import { useColorScheme } from 'react-native';
 import Kozakowski from './Components/Kozakowski';
 import Jacoszek from './Components/Jacoszek';
@@ -11,6 +10,7 @@ import Mrowinski from './Components/Mrowinski';
 import HomeScreen from './Components/HomeScreen';
 import { CustomDarkTheme, CustomLightTheme } from './Components/Theme'; 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 
 const Tab = createBottomTabNavigator();
@@ -20,7 +20,16 @@ function App() {
   return (
     <NavigationContainer theme={scheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
       <Tab.Navigator initialRouteName="Home">
-        <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Welcome' }} />
+      <Tab.Screen 
+          name="Home" 
+          component={HomeScreen} 
+          options={{
+            title: 'Home',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialIcons name="home" color={color} size={size} />
+            ),
+          }} 
+        />
         <Tab.Screen name="Kozakowski" component={Kozakowski} options={{ title: 'Kozakowski' }} />
         <Tab.Screen name="Jacoszek" component={Jacoszek} options={{ title: 'Jacoszek' }} />
         <Tab.Screen name="Kordella" component={Kordella} options={{ title: 'Kordella' }} />
