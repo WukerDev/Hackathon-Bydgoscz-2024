@@ -34,10 +34,12 @@ const checkUser = async (username: string): Promise<boolean> => {
 const hashPassword = (password: string) => {
   return SHA512(password).toString();
 };
-const isValidPassword = (password:string) => {
+const isValidPassword = (password: string) => {
   const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   return re.test(password);
 };
+
+
 
 const isValidEmail = (email: any) => {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\\.,;:\s@"]+\.)+[^<>()[\]\\.,;:\s@"]{2,})$/i;
@@ -114,11 +116,11 @@ const Zelaskiewicz: React.FC = () => {
       Alert.alert('Niepoprawny Email', 'Proszę wprowadzić prawidłowy adres email.');
       return;
     }
-    if (!isValidPassword(password)) {
+    else if (!isValidPassword(password)) {
       Alert.alert('Hasło nie spełnia wymagań', 'Hasło musi zawierać co najmniej 8 znaków, w tym przynajmniej jedną dużą literę, jedną małą literę, jedną cyfrę i jeden znak specjalny.');
       return;
     }
-    if (password !== confirmPassword) {
+    else if (password !== confirmPassword) {
       Alert.alert('Rejestracja nieudana', 'Hasła nie są zgodne.');
       return;
     }
