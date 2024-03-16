@@ -54,16 +54,18 @@ function App() {
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="message" color={color} size={size} />
             ), }} />
+            <Tab.Screen name="Assistant" component={Jacoszek} options={{ title: 'Assistant',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialIcons name="message" color={color} size={size} />
+            ), }} />
 <Tab.Screen name="Options" component={SettingsStackScreen} options={{ title: 'Settings',
     tabBarIcon: ({ color, size }) => (
       <MaterialIcons name="settings" color={color} size={size} />
     ), }} />
-        <Tab.Screen name="Kozakowski" component={Kozakowski} />
-        <Tab.Screen name="Jacoszek" component={Jacoszek} />
         <Tab.Screen name="Kordella" component={Kordella} />
         <Tab.Screen name="Zelazkiewicz" component={Zelazkiewicz} />
         <Tab.Screen name="Mrowinski" component={Mrowinski} />
-        <Tab.Screen name="Switalski" component={Switalski} />
+
 
 
       </Tab.Navigator>
