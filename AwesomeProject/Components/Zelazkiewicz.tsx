@@ -1,25 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, useColorScheme } from 'react-native';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { SHA512 } from 'crypto-js';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CustomDarkTheme, CustomLightTheme } from './Theme';
-import tw from 'twrnc';
+
 
 const signIn = async () => {
   try {
     await GoogleSignin.hasPlayServices();
     const userInfo = await GoogleSignin.signIn();
-    // You can now use userInfo object which contains user's information
     console.log(userInfo);
   } catch (error) {
     console.log(error);
   }
 };
+
 GoogleSignin.configure({
-  webClientId: '737570657274-f089gc9a0j6qoi6ki8upek9g80qoif6c.apps.googleusercontent.com',
-  offlineAccess: true, // Jeśli potrzebujesz tokena odświeżania
-  scopes: ['https://www.googleapis.com/auth/userinfo.email'], // Przykładowy zakres dostępu do Google Drive API
+  webClientId: '451172774503-f44ds1bpuj69mj4f5pcv080qhj7jsdda.apps.googleusercontent.com',
 });
 
 const baseURL = 'http://frog01-41647.wykr.es';
@@ -46,6 +44,7 @@ const checkUser = async (username: string): Promise<boolean> => {
     return false;
   }
 };
+
 const hashPassword = (password: string) => {
   return SHA512(password).toString();
 };
@@ -90,6 +89,7 @@ async function login({ userName, password }: UserCredentials): Promise<void> {
     const data = await response.json();
     if (data['login']) {
       Alert.alert('Logowanie zakończone sukcesem', 'Zalogowałeś się pomyślnie.');
+
     } else {
       Alert.alert('Logowanie nieudane', 'Niepoprawny email lub hasło.');
     }
@@ -131,6 +131,13 @@ const Zelaskiewicz: React.FC = () => {
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState<boolean>(false);
   const [showRegistrationCheckForm, setShowRegistrationCheckForm] = useState<boolean>(false);
 
+  useEffect(() => {
+    // Initialize Google Sign-In
+    GoogleSignin.configure({
+      webClientId: '451172774503-f44ds1bpuj69mj4f5pcv080qhj7jsdda.apps.googleusercontent.com',
+    });
+  }, []);
+
   const handleGoogleLogin = async (): Promise<void> => {
     try {
       await GoogleSignin.hasPlayServices();
@@ -156,6 +163,7 @@ const Zelaskiewicz: React.FC = () => {
     login({ userName: email, password });
   };
 
+  
   const handleRegister = async (): Promise<void> => {
     if (!isValidEmail(email)) {
       Alert.alert('Niepoprawny Email', 'Proszę wprowadzić prawidłowy adres email.');
@@ -199,6 +207,7 @@ const Zelaskiewicz: React.FC = () => {
   const scheme = useColorScheme();
   const theme = scheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   return (
+    
     <View style={styles.container}>
       {showLoginForm && (
         <>
@@ -233,7 +242,7 @@ const Zelaskiewicz: React.FC = () => {
           </Text>
           <View style={styles.dividerContainer}>
             <View style={styles.divider} />
-            <Text style={styles.orText}>LUB</Text>
+            <Text style={styles.orText} id="orText">LUB</Text>
             <View style={styles.divider} />
           </View>
           <TouchableOpacity style={styles.googleButton} onPress={handleGoogleLogin}>
@@ -243,8 +252,11 @@ const Zelaskiewicz: React.FC = () => {
       )}
       {showRegistrationCheckForm && (
         <>
+        <View style={styles.passwordContainer}>
+
+ 
           <TextInput
-            style={styles.input}
+            style={styles.passwordContainer}
             placeholder="Adres e-mail"
             onChangeText={setEmail}
             value={email}
@@ -256,10 +268,12 @@ const Zelaskiewicz: React.FC = () => {
           <TouchableOpacity style={styles.button} onPress={toggleForms}>
             <Text style={styles.buttonText}>Wróć</Text>
           </TouchableOpacity>
+          </View>
         </>
       )}
       {showRegistrationForm && (
   <>
+      <View style={styles.passwordContainer}>
     <TextInput
       style={styles.input}
       placeholder="Adres e-mail"
@@ -267,6 +281,7 @@ const Zelaskiewicz: React.FC = () => {
       value={email}
       placeholderTextColor="black"
     />
+</View>
     <View style={styles.passwordContainer}>
             <TextInput
               style={[styles.input, {flex: 1}]}
@@ -317,7 +332,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: 'gray',
   },
   header: {
     fontSize: 24,
@@ -332,13 +347,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingLeft: 10,
     borderRadius: 5,
-    color: 'black',
   },
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
     width: '100%',
+    backgroundColor: 'gray',
   },
   visibilityToggle: {
     marginLeft: 10,
@@ -353,7 +368,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonText: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -369,10 +383,10 @@ const styles = StyleSheet.create({
   divider: {
     flex: 1,
     height: 1,
-    backgroundColor: 'gray',
   },
   orText: {
     marginHorizontal: 10,
+
   },
   googleButton: {
     backgroundColor: '#4285F4', // Niebieski kolor Google
