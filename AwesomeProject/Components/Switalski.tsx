@@ -3,6 +3,9 @@ import { View, Text, PermissionsAndroid, Button, ScrollView } from 'react-native
 import SmsListener from '@ernestbies/react-native-android-sms-listener';
 import SmsAndroid from "react-native-get-sms-android";
 import tw from 'twrnc';
+import { useColorScheme } from 'react-native';
+
+import { CustomDarkTheme, CustomLightTheme } from './Theme';
 
 interface SmsMessage {
   originatingAddress: string;
@@ -46,6 +49,8 @@ async function requestReadSmsPermission() {
 }
 
 const Switalski = () => {
+  const scheme = useColorScheme();
+  const theme = scheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   const [smsList, setSmsList] = useState<SmsAndroidMessage[]>([]);
   const [receivedMessage, setReceivedMessage] = useState<SmsMessage | null>(null);
 
@@ -87,10 +92,10 @@ const Switalski = () => {
           <Text>Timestamp: {formatDate(receivedMessage.timestamp)}</Text>
         </View>
       )}
-      <Text style={tw`text-lg font-bold`}>SMS List:</Text>
+      <Text style={tw`text-2xl font-bold mt-6`}>Lista SMS-ów:</Text>
       <ScrollView style={tw`mt-4 w-full p-4`}>
         {smsList.map((sms, index) => (
-          <View key={index} style={tw`mt-2 rounded p-4 flex-row justify-between items-center`}>
+          <View key={index} style={[tw`mt-2 rounded p-4 flex-row justify-between items-center`,{backgroundColor: theme.colors.buttonBackground}]}>
             <View style={tw`w-4/6`}>
               <Text style={tw`text-xl`}>{sms.address}</Text>
               <Text style={tw`text-base`}>{sms.body}</Text>

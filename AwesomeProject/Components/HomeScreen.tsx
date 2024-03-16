@@ -43,7 +43,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const theme = useColorScheme();
   const styles = theme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   const buttons: IconButtonProps[] = [
-    { title: 'Ostatnio wykryte', iconName: 'message', onPress: () => console.log('Pressed One') },
+    { title: 'Ostatnio wykryte', iconName: 'message', onPress: () => navigation.navigate('Messages') },
     { title: 'Ważne', iconName: 'alert', onPress: () => console.log('Pressed Two') },
     { title: 'FAQ', iconName: 'head-question', onPress: () => console.log('Pressed Three') },
     { title: 'Zablokowane', iconName: 'block-helper', onPress: () => console.log('Pressed Four') },
