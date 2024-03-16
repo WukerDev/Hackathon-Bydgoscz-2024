@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Button, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 
@@ -7,7 +7,6 @@ const CHAT_HISTORY_KEY = '@chat_history';
 
 const Chat: React.FC = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
     loadChatHistory();
@@ -44,8 +43,6 @@ const Chat: React.FC = () => {
   const onSend = async (newMessages: IMessage[] = []) => {
     setMessages((previousMessages) => GiftedChat.append(previousMessages, newMessages));
 
-    setIsTyping(true); // Rozpoczęcie animacji isTyping
-    
     const chatHistory = messages.concat(newMessages).map((msg) => ({
       role: msg.user._id === 1 ? 'user' : 'assistant',
       content: msg.text,
@@ -66,8 +63,6 @@ const Chat: React.FC = () => {
 
       const reply = await response.json();
 
-      setIsTyping(true); // Rozpoczęcie animacji isTyping
-      
       const messageParts = reply.content.split('. '); // Split the message by sentences for example
       let totalDelay = 0;
 
@@ -92,8 +87,7 @@ const Chat: React.FC = () => {
             return updatedMessages;
           });
 
-          // Stop typing indicator after the last message
-          if (index === messageParts.length - 1) setIsTyping(false);
+          
           
         }, totalDelay); // Use the calculated delay
       });
@@ -108,8 +102,8 @@ const Chat: React.FC = () => {
         <Button title="New Chat" onPress={clearChatHistory} />
       </View>
       <GiftedChat
-        isTyping={isTyping}
         messages={messages}
+        isTyping={true} // Show the typing indicator
         onSend={(messagesToSend: IMessage[]) => onSend(messagesToSend)}
         user={{ _id: 1 }}
         renderFooter={() => null} // Typing indicator managed via isTyping prop
