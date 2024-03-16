@@ -54,7 +54,7 @@ function App() {
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="message" color={color} size={size} />
             ), }} />
-            <Tab.Screen name="Assistant" component={Jacoszek} options={{ title: 'Asystent Bezpieczeństwa',
+            <Tab.Screen name="Assistant" component={Jacoszek} options={{ title: 'Asystent',
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="assistant" color={color} size={size} />
             ), }} />
