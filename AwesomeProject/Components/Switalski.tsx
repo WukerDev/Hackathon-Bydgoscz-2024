@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, PermissionsAndroid, Button, ScrollView } from 'react-native';
+import { View, Text, PermissionsAndroid, Button, ScrollView, Alert } from 'react-native';
 import SmsListener from '@ernestbies/react-native-android-sms-listener';
 import SmsAndroid from "react-native-get-sms-android";
-import tw from 'twrnc';
-import { useColorScheme } from 'react-native';
+import { Linking } from 'react-native';
 
-import { CustomDarkTheme, CustomLightTheme } from './Theme';
+import tw from 'twrnc';
+
+let shouldContinue = true;
 
 interface SmsMessage {
   originatingAddress: string;
@@ -30,58 +31,97 @@ function formatDate(timestamp: number) {
 }
 
 async function requestReadSmsPermission() {
-  try {
-    const grantedRead = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.READ_SMS,
-    );
-    const grantedReceive = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.RECEIVE_SMS,
-    );
+  let grantedRead = false;
+  let grantedReceive = false;
+  
 
-    if (grantedRead === PermissionsAndroid.RESULTS.GRANTED && grantedReceive === PermissionsAndroid.RESULTS.GRANTED) {
-      console.log("SMS read/receive permissions granted");
-    } else {
-      console.log("SMS read/receive permissions denied");
-    }
-  } catch (err) {
-    console.warn(err);
+  while (!grantedRead && !grantedReceive && shouldContinue) {
+      try {
+          grantedRead = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.READ_SMS,
+          ) === PermissionsAndroid.RESULTS.GRANTED;
+          grantedReceive = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.RECEIVE_SMS,
+          ) === PermissionsAndroid.RESULTS.GRANTED;
+          if (grantedRead && grantedReceive) {
+              console.log("SMS read/receive permissions granted");
+          } else {
+              console.log("SMS read/receive permissions not granted");
+              const AsyncAlert = async () => new Promise((resolve) => {
+                  Alert.alert(
+                      "Wymagane zezwolenie",
+                      "Ten komponent wymaga zezwolenia na odczytywanie wiadomości w celu ich weryfikacji.",
+                      [
+                          {
+                              text: 'OK',
+                              onPress: () => resolve('OK'),
+                          },
+                          {
+                              text: 'Idź do ustawień',
+                              onPress:  () => {
+                                  
+                                  shouldContinue = false; // Break from the loop
+                                  Linking.openSettings();
+                                   resolve('Idź do ustawie');
+                                  
+                              },
+                              style: 'cancel',
+                          },
+                      ],
+                      { cancelable: false },
+                  );
+              });
+
+              await AsyncAlert();
+          }
+      } catch (err) {
+          console.warn(err);
+      }
   }
 }
 
 const Switalski = () => {
-  const scheme = useColorScheme();
-  const theme = scheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   const [smsList, setSmsList] = useState<SmsAndroidMessage[]>([]);
   const [receivedMessage, setReceivedMessage] = useState<SmsMessage | null>(null);
+  
 
   useEffect(() => {
-    requestReadSmsPermission();
-  
-    const listener = SmsListener.addListener((message: SmsMessage) => {
-      setReceivedMessage({
-        originatingAddress: message.originatingAddress,
-        body: message.body,
-        timestamp: message.timestamp,
-      });
-    });
-  
-    // Fetching SMS messages
-    SmsAndroid.list(
-      JSON.stringify(filter),
-      (fail: string) => {
-        console.log("Failed with this error: " + fail);
-      },
-      (count: number, smsListString: string) => {
-        // Here, we explicitly assert the type of the parsed JSON to be an array of SmsAndroidMessage
-        const arr: SmsAndroidMessage[] = JSON.parse(smsListString) as SmsAndroidMessage[];
-        setSmsList(arr);
+    const fetchData = async () => {
+      // Request permission
+      await requestReadSmsPermission();
+      if (!shouldContinue) {
+        return ;
       }
-    );
-  
-    // Cleanup the SMS listener
-    return () => listener.remove();
+
+      // Permission granted, continue with other operations
+      const listener = SmsListener.addListener((message: SmsMessage) => {
+        setReceivedMessage({
+          originatingAddress: message.originatingAddress,
+          body: message.body,
+          timestamp: message.timestamp,
+        });
+      });
+
+      // Fetching SMS messages
+      SmsAndroid.list(
+        JSON.stringify(filter),
+        (fail: string) => {
+          console.log("Failed with this error: " + fail);
+        },
+        (count: number, smsListString: string) => {
+          // Here, we explicitly assert the type of the parsed JSON to be an array of SmsAndroidMessage
+          const arr: SmsAndroidMessage[] = JSON.parse(smsListString) as SmsAndroidMessage[];
+          setSmsList(arr);
+        }
+      );
+    };
+
+    fetchData();
   }, []);
-  
+
+  if (!shouldContinue) {
+    return null;
+  }
 
   return (
     <View style={tw`flex-1 items-center justify-center w-full`}>
@@ -92,17 +132,17 @@ const Switalski = () => {
           <Text>Timestamp: {formatDate(receivedMessage.timestamp)}</Text>
         </View>
       )}
-      <Text style={tw`text-2xl font-bold mt-6`}>Lista SMS-ów:</Text>
+      <Text style={tw`text-lg font-bold`}>SMS List:</Text>
       <ScrollView style={tw`mt-4 w-full p-4`}>
         {smsList.map((sms, index) => (
-          <View key={index} style={[tw`mt-2 rounded p-4 flex-row justify-between items-center`,{backgroundColor: theme.colors.buttonBackground}]}>
+          <View key={index} style={tw`mt-2 bg-gray-200 rounded p-4 flex-row justify-between items-center`}>
             <View style={tw`w-4/6`}>
               <Text style={tw`text-xl`}>{sms.address}</Text>
               <Text style={tw`text-base`}>{sms.body}</Text>
               <Text style={tw`text-sm`}>{formatDate(sms.date)}</Text>
             </View>
             <View style={tw`rounded-full w-2/6 p-2`}>
-              <Button title="Report" onPress={() => {}} />
+              <Button title="Report" onPress={() => { }} />
             </View>
           </View>
         ))}
