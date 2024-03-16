@@ -252,8 +252,11 @@ const Zelaskiewicz: React.FC = () => {
       )}
       {showRegistrationCheckForm && (
         <>
+        <View style={styles.passwordContainer}>
+
+ 
           <TextInput
-            style={styles.input}
+            style={styles.passwordContainer}
             placeholder="Adres e-mail"
             onChangeText={setEmail}
             value={email}
@@ -265,10 +268,12 @@ const Zelaskiewicz: React.FC = () => {
           <TouchableOpacity style={styles.button} onPress={toggleForms}>
             <Text style={styles.buttonText}>Wróć</Text>
           </TouchableOpacity>
+          </View>
         </>
       )}
       {showRegistrationForm && (
   <>
+      <View style={styles.passwordContainer}>
     <TextInput
       style={styles.input}
       placeholder="Adres e-mail"
@@ -276,6 +281,7 @@ const Zelaskiewicz: React.FC = () => {
       value={email}
       placeholderTextColor="black"
     />
+</View>
     <View style={styles.passwordContainer}>
             <TextInput
               style={[styles.input, {flex: 1}]}
@@ -326,6 +332,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
+    backgroundColor: 'gray',
   },
   header: {
     fontSize: 24,
@@ -379,7 +386,7 @@ const styles = StyleSheet.create({
   },
   orText: {
     marginHorizontal: 10,
-    color:'black',
+
   },
   googleButton: {
     backgroundColor: '#4285F4', // Niebieski kolor Google

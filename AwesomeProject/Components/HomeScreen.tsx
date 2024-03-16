@@ -67,7 +67,7 @@ const HomeScreen = ({ navigation }) => {
 
     animationLoop.start();
 
-    const interval = setInterval(selectTips, 15000); // Change tips every 15 seconds
+    const interval = setInterval(selectTips, 3500); // Change tips every 15 seconds
 
     // Clean up function
     return () => {
