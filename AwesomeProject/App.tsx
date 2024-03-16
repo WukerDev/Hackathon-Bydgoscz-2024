@@ -33,7 +33,7 @@ function App() {
             ),
           }} 
         />
-         <Tab.Screen name="Messeges" component={Settings} options={{ title: 'Messeges',
+         <Tab.Screen name="Messages" component={Settings} options={{ title: 'Messages',
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="message" color={color} size={size} />
             ), }} />
@@ -47,7 +47,7 @@ function App() {
         <Tab.Screen name="Switalski" component={Switalski} />
         <Tab.Screen name="Zelazkiewicz" component={Zelazkiewicz} />
         <Tab.Screen name="Mrowinski" component={Mrowinski} />
-        
+
 
       </Tab.Navigator>
     </NavigationContainer>
