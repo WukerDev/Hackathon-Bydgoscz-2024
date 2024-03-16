@@ -28,8 +28,8 @@ function Settings() {
           source={userAvatar}
         />
         <View style={styles.userNameContainer}>
-          <Text style={[styles.userNameText, { color: theme.colors.text }]}>User Name</Text>
-          <Text style={[styles.userDetailText, { color: theme.colors.text }]}>Profile, Account & Everything else</Text>
+          <Text style={[styles.userNameText, { color: theme.colors.text }]}>_super_creeper_0783</Text>
+          <Text style={[styles.userDetailText, { color: theme.colors.text }]}>Profil </Text>
         </View>
         <Icon name="chevron-forward-outline" size={20} color="#C7C7CC" />
       </TouchableOpacity>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   avatar: {
     ...tw`w-16 h-16 rounded-full mr-4`,
     borderWidth: 2,
-    borderColor: 'white',
+    borderColor: '#FF5',
   },
   userNameContainer: tw`flex-1`,
   userNameText: {

@@ -45,7 +45,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const buttons: IconButtonProps[] = [
     { title: 'Ostatnio wykryte', iconName: 'message', onPress: () => console.log('Pressed One') },
     { title: 'Ważne', iconName: 'alert', onPress: () => console.log('Pressed Two') },
-    { title: 'FAQ', iconName: 'question', onPress: () => console.log('Pressed Three') },
+    { title: 'FAQ', iconName: 'head-question', onPress: () => console.log('Pressed Three') },
     { title: 'Zablokowane', iconName: 'block-helper', onPress: () => console.log('Pressed Four') },
     { title: 'Aktualizacje', iconName: 'download', onPress: () => console.log('Pressed Five') },
     { title: 'Konto premium', iconName: 'key-variant', onPress: () => console.log('Pressed Six') },
