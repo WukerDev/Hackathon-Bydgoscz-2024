@@ -35,14 +35,15 @@ function App() {
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="message" color={color} size={size} />
             ), }} />
+                    <Tab.Screen name="SecurityAssistant" component={Jacoszek} options={{ title: 'Security Assistant',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialIcons name="assistant" color={color} size={size} />
+            ), }} />
         <Tab.Screen name="Options" component={Settings} options={{ title: 'Settings',
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="settings" color={color} size={size} />
             ), }} />
-        <Tab.Screen name="SecurityAssistant" component={Jacoszek} options={{ title: 'Security Assistant',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialIcons name="security" color={color} size={size} />
-            ), }} />
+
         <Tab.Screen name="Kordella" component={Kordella} />
         <Tab.Screen name="Zelazkiewicz" component={Zelazkiewicz} />
         <Tab.Screen name="Mrowinski" component={Mrowinski} />
