@@ -66,31 +66,33 @@ function Mrowinski() {
     };
   }, []);
 
+  let licznik: number = 0;
+
   const handleMessageReceived = (message: SmsMessage) => {
+    licznik = 0;
     setReceivedMessage(message);
     checkForLink(message.body);
     checkForSuspiciousWords(message.body);
     checkForVulgarWords(message.body);
     checkForLinks(message.body);
     detectSocialEngineeringAttempts(message.body);
+    if(licznik > 0) {
+      showNotification('Warning', 'This message is suspicious');
+    }
   };
 
   function checkForLink(url: string): void {
-    if (!/^https?:\/\//i.test(url)) {
-        showNotification('Nieprawidłowy link', url);
-        return;
-    }
 
     const reversed = 'ptth:/' + url.split('').reverse().join('');
     if (url.includes(reversed)) {
-        showNotification('Nieprawidłowy link', url);
+      licznik++;
         return;
     }
 
     const suspiciousStrings = ['login', 'bank', 'account', 'password', 'credential'];
     for (let i = 0; i < suspiciousStrings.length; i++) {
         if (url.includes(suspiciousStrings[i])) {
-            showNotification('Podejrzany link', url);
+            licznik++;
             return;
         }
     }
@@ -98,7 +100,7 @@ function Mrowinski() {
     const shorteningServices = ['bit.ly', 'tinyurl.com', 'goo.gl', 't.co', 'ow.ly'];
     for (let i = 0; i < shorteningServices.length; i++) {
         if (url.includes(shorteningServices[i])) {
-            showNotification('Link skrócony', url);
+            licznik++;
             return;
         }
     }
@@ -110,7 +112,7 @@ function Mrowinski() {
 
     for (let i = 0; i < suspiciousWords.length; i++) {
         if (message.toLowerCase().includes(suspiciousWords[i])) {
-            showNotification('Podejrzana wiadomość', message);
+            licznik++;  
             return;
         }
     }
@@ -140,7 +142,7 @@ function detectSocialEngineeringAttempts(message: string): void {
 
   for (let phrase of suspiciousPhrases) {
       if (message.includes(phrase)) {
-          showNotification('Podejrzana próba socjotechniczna', message);
+          licznik++;
           return;
       }
   }
@@ -275,7 +277,7 @@ function checkForVulgarWords(message: string): void {
 
   for (let word of vulgarWords) {
       if (message.includes(word)) {
-          showNotification('Wulgarna wiadomość', message);
+          licznik++;
           return;
       }
   }
@@ -385,25 +387,18 @@ const checkForLinks = (message: string): void => {
       return;
   }
 
+  const linkWithoutProtocol = links.map(link => link.replace('https://', '')).join(' ');
+
   for (let link of links) {
-      if (!PopularLinks.includes(link)) {
-          showNotification('Niebezpieczny link', link);
+      if (!PopularLinks.includes(linkWithoutProtocol)) {
+          licznik++;
+          return;
       }  
 }
 
 }
 
-  return (
-    <View style={[tw`flex-1`]}>
-      <TouchableOpacity
-        style={[tw`bg-blue-500 rounded-md p-3 m-2`, { alignSelf: 'center' }]}
-        onPress={() => showNotification('Hello', 'This is a notification')}
-      >
-        <Text style={{color: theme.colors.background}}>Schedule Notification</Text>
-      </TouchableOpacity>
-
-      </View>
-  );
+ 
 }
 
 

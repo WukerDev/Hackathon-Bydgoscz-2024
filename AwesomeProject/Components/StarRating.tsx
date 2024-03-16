@@ -13,14 +13,13 @@ const StarRating = ({ rating, onRatingChange }) => {
   return (
     <View style={{ flexDirection: 'row' }}>
       {[1, 2, 3, 4, 5].map((star) => (
-        <TouchableOpacity key={star} onPress={() => handleRating(star)}>
+        <View key={star} style={{ marginRight: 5 }}>
           <Icon
             name={star <= selectedRating ? 'star' : 'star-o'}
             size={20}
             color={star <= selectedRating ? 'red' : 'red'}
-            style={{ marginRight: 5 }}
           />
-        </TouchableOpacity>
+        </View>
       ))}
     </View>
   );

@@ -62,7 +62,7 @@ function App() {
     tabBarIcon: ({ color, size }) => (
       <MaterialIcons name="settings" color={color} size={size} />
     ), }} />
-
+      <Tab.Screen name="Mrowinski" component={Mrowinski} />
 
 
 

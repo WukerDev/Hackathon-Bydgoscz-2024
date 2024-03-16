@@ -22,7 +22,7 @@ interface SmsAndroidMessage {
   address: string;
   body: string;
   date: number;
-  dangerLevel:number;
+  dangerLevel: number;
 }
 
 var filter = {
@@ -67,7 +67,7 @@ async function requestReadSmsPermission() {
 
                   shouldContinue = false; // Break from the loop
                   Linking.openSettings();
-                  resolve('Idź do ustawie');
+                  resolve('Idź do ustawień');
 
                 },
                 style: 'cancel',
@@ -90,6 +90,8 @@ const Switalski = () => {
   const theme = currentTheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   const [smsList, setSmsList] = useState<SmsAndroidMessage[]>([]);
   const [receivedMessage, setReceivedMessage] = useState<SmsMessage | null>(null);
+  let initialButtonTitles;
+  const [buttonTitles, setButtonTitles] = useState<string[]>([]);
 
 
   useEffect(() => {
@@ -123,6 +125,8 @@ const Switalski = () => {
           arr.forEach(smsMsg => {
             smsCalculateDangerLevel(smsMsg);
           });
+          const initialButtonTitles = arr.map(() => "Zgłoś");
+          setButtonTitles(initialButtonTitles);
           setSmsList(arr);
         }
       );
@@ -144,30 +148,35 @@ const Switalski = () => {
           <Text>Timestamp: {formatDate(receivedMessage.timestamp)}</Text>
         </View>
       )}
-      <View style={tw` mt-2  flex justify-between items-center`}>
-        <Text style={tw`text-lg font-bold`}>Lista SMS:</Text>
-      </View>
 
       <ScrollView style={tw`w-full pb-4 pr-4 pl-4`}>
-      {smsList.map((sms, index) => (
-        <View key={index} style={[tw`mt-2 rounded p-4 flex-row justify-between relative`, {color:theme.colors.text, backgroundColor: theme.colors.buttonBackground}]}>
-          <View style={tw`w-4/6`}>
-            <Text style={tw`text-xl`}>{sms.address}</Text>
-            <Text numberOfLines={2} ellipsizeMode="tail" style={tw`text-base`}>{sms.body}</Text>
-            <Text style={tw`text-sm`}>{formatDate(sms.date)}</Text>
+        {smsList.map((sms, index) => (
+          <View key={index} style={tw`mt-2 bg-neutral-800 rounded p-4 flex-row justify-between relative`}>
+            <View style={tw`w-4/6`}>
+              <Text style={tw`text-xl`}>{sms.address}</Text>
+              <Text numberOfLines={2} ellipsizeMode="tail" style={tw`text-base`}>{sms.body}</Text>
+              <Text style={tw`text-sm`}>{formatDate(sms.date)}</Text>
+            </View>
+            <View style={tw`absolute top-5 right-2`}>
+              <StarRating
+                rating={sms.dangerLevel}
+                onRatingChange={(rating) => setSelectedRating(rating)}
+              />
+            </View>
+            <View style={tw`absolute bottom-3 w-26 right-4`}>
+              <Button title={buttonTitles[index]}
+                disabled={buttonTitles[index] =="Zgłoszony"}
+                onPress={() => {
+                  const updatedButtonTitles = [...buttonTitles]; // Create a copy of buttonTitles
+                  updatedButtonTitles[index] = "Zgłoszony"; // Update the title of the pressed button
+                  setButtonTitles(updatedButtonTitles);
+                  //add telephone number to suspicious link if phone exists in db increase number of reports (more reports more extra danger level)
+                  //add suspicious element of message to db
+                }} />
+            </View>
           </View>
-          <View style={tw`absolute top-5 right-2`}>
-            <StarRating
-              rating={sms.dangerLevel}
-              onRatingChange={(rating) => setSelectedRating(rating)}
-            />
-          </View>
-          <View style={tw`absolute bottom-3 right-4`}>
-            <Button title="Zgłoś" onPress={() => { }} />
-          </View>
-        </View>
-      ))}
-    </ScrollView>
+        ))}
+      </ScrollView>
     </View>
   );
 };

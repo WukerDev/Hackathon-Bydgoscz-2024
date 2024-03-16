@@ -61,7 +61,7 @@ const Chat: React.FC = () => {
     }));
 
     try {
-      const response = await fetch('http://10.13.45.163:5000/sendToGPT', {
+      const response = await fetch('http://192.168.35.175:5000/sendToGPT', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ const Chat: React.FC = () => {
 
         setTimeout(() => {
           const receivedMessage: IMessage = {
-            _id: Math.round(Math.random() * 1000000),
+            _id: Math.round(Math.random() * 2000000),
             text: part,
             createdAt: new Date(),
             user: {
