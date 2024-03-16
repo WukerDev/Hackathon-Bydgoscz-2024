@@ -326,7 +326,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#fff',
   },
   header: {
     fontSize: 24,
@@ -341,13 +340,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingLeft: 10,
     borderRadius: 5,
-    color: 'black',
   },
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
     width: '100%',
+    backgroundColor: 'gray',
   },
   visibilityToggle: {
     marginLeft: 10,
@@ -362,7 +361,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonText: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -378,7 +376,6 @@ const styles = StyleSheet.create({
   divider: {
     flex: 1,
     height: 1,
-    backgroundColor: 'gray',
   },
   orText: {
     marginHorizontal: 10,
