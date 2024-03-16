@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import tw from 'twrnc';
 
-function Kozakowski() {
+function Messages() {
   return (
     <View style={tw`pt-6 bg-blue-100`}>
       <Text>Component 1</Text>
@@ -10,4 +10,4 @@ function Kozakowski() {
   );
 }
 
-export default Kozakowski;
+export default Messages;
