@@ -20,7 +20,7 @@ GoogleSignin.configure({
   webClientId: '451172774503-f44ds1bpuj69mj4f5pcv080qhj7jsdda.apps.googleusercontent.com',
 });
 
-const baseURL = 'http://frog01-41647.wykr.es';
+const baseURL = '10.13.45.163:5000';
 
 interface UserCredentials {
   userName: string;
@@ -29,7 +29,7 @@ interface UserCredentials {
 
 const checkUser = async (username: string): Promise<boolean> => {
   try {
-    const response = await fetch('http://frog01-41647.wykr.es/checkIfExist', {
+    const response = await fetch('http://10.13.45.163:5000/checkIfExist', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ const isValidEmail = (email: any) => {
 const addUser = async (username: string, password: string) => {
   const hashedPassword = hashPassword(password);
   try {
-    const response = await fetch('http://frog01-41647.wykr.es/addUser', {
+    const response = await fetch('http://10.13.45.163:5000/addUser', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
