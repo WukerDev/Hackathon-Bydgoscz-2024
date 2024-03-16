@@ -62,6 +62,10 @@ const settingsOptions: option[] = [
     id: '3',
     label: 'Nadzorowane Aplikacje',
     icon: 'apps-outline',
+    subOptions: [
+      { id: '2-1', label: 'Połączone Konta', icon: 'mail-outline', screenName: 'Messages'},
+      { id: '2-2', label: 'Połączone Aplikacje', icon: 'notifications-circle-outline', screenName: 'Messages'},
+    ],
   },
   {
     id: '4',
