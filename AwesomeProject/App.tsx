@@ -27,8 +27,8 @@ function SettingsStackScreen() {
       <SettingsStack.Screen name="SettingsMain" component={Settings} options={{ headerShown: false }} />
       <SettingsStack.Screen name="EditProfile" component={EditProfile} />
       <SettingsStack.Screen name="Security" component={Security} />
-      <SettingsStack.Screen name="Logout" component={Logout} />
-      <SettingsStack.Screen name="SwitchAccount" component={SwitchAccount} />
+      <SettingsStack.Screen name="Logout" component={Zelazkiewicz} options={{title: "Logowanie"}} />
+      <SettingsStack.Screen name="SwitchAccount" component={Zelazkiewicz} />
     </SettingsStack.Navigator>
   );
 }
@@ -39,37 +39,36 @@ function App() {
   const scheme = useColorScheme();
   return (
     <NavigationContainer theme={scheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
-      <Tab.Navigator initialRouteName="Home">
+      <Tab.Navigator initialRouteName="Home" >
       <Tab.Screen 
           name="Home" 
           component={HomeScreen} 
           options={{
-            title: 'Strona Główna',
+            title: 'Strona Główna', tabBarLabel: undefined,
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="home" color={color} size={size} />
             ),
           }} 
         />
-         <Tab.Screen name="Nadzór Wiadomości" component={Switalski} options={{ title: 'Nadzór Wiadomości',
+         <Tab.Screen name="Nadzór Wiadomości" component={Switalski} options={{ title: 'Nadzór Wiadomości', 
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="message" color={color} size={size} />
             ), }} />
-            <Tab.Screen name="Assistant" component={Jacoszek} options={{ title: 'Asystent Bezpieczeństwa',
+            <Tab.Screen name="Assistant" component={Jacoszek} options={{ title: 'Asystent',
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="assistant" color={color} size={size} />
             ), }} />
-<Tab.Screen name="Options" component={SettingsStackScreen} options={{ title: 'Settings',
+<Tab.Screen name="Options" component={SettingsStackScreen} options={{ title: 'Ustawienia',
     tabBarIcon: ({ color, size }) => (
       <MaterialIcons name="settings" color={color} size={size} />
     ), }} />
-        <Tab.Screen name="Kordella" component={Kordella} />
-        <Tab.Screen name="Zelazkiewicz" component={Zelazkiewicz} />
-        <Tab.Screen name="Mrowinski" component={Mrowinski} />
+
 
 
 
       </Tab.Navigator>
     </NavigationContainer>
+ 
   );
 }
 
