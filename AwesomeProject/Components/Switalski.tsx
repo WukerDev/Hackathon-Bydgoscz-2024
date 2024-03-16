@@ -5,6 +5,9 @@ import SmsAndroid from "react-native-get-sms-android";
 import StarRating from './StarRating';
 import { Linking } from 'react-native';
 
+import { CustomDarkTheme, CustomLightTheme } from './Theme';
+import { useColorScheme } from 'react-native';
+
 import tw from 'twrnc';
 
 let shouldContinue = true;
@@ -83,6 +86,8 @@ async function requestReadSmsPermission() {
 }
 
 const Switalski = () => {
+  const currentTheme = useColorScheme();
+  const theme = currentTheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   const [smsList, setSmsList] = useState<SmsAndroidMessage[]>([]);
   const [receivedMessage, setReceivedMessage] = useState<SmsMessage | null>(null);
   let initialButtonTitles;
