@@ -208,15 +208,15 @@ const Zelaskiewicz: React.FC = () => {
   const theme = scheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   return (
     
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: theme.colors.background}]}>
       {showLoginForm && (
         <>
           <TextInput
-            style={styles.input}
+            style={[styles.input, {color:theme.colors.text}]}
             placeholder="Adres e-mail"
             onChangeText={setEmail}
             value={email}
-            placeholderTextColor="black"
+            placeholderTextColor={theme.colors.text}
           />
           <View style={styles.passwordContainer}>
             <TextInput
@@ -225,24 +225,24 @@ const Zelaskiewicz: React.FC = () => {
               secureTextEntry={!passwordVisible}
               onChangeText={setPassword}
               value={password}
-              placeholderTextColor="black"
+              placeholderTextColor={theme.colors.text}
             />
             <TouchableOpacity onPress={togglePasswordVisibility} style={styles.visibilityToggle}>
-              <Icon name={passwordVisible ? 'eye-off' : 'eye'} size={24} color="black" />
+              <Icon name={passwordVisible ? 'eye-off' : 'eye'} size={24} color={theme.colors.text} />
             </TouchableOpacity>
           </View>
           <TouchableOpacity style={styles.button} onPress={handleManualLogin}>
             <Text style={styles.buttonText}>Kontynuuj</Text>
           </TouchableOpacity>
           <Text
-            style={styles.registerText}
+            style={[styles.registerText,{color:theme.colors.text}]}
             onPress={toggleForms}
           >
             Nie masz konta? Zarejestruj się
           </Text>
           <View style={styles.dividerContainer}>
             <View style={styles.divider} />
-            <Text style={styles.orText} id="orText">LUB</Text>
+            <Text style={[styles.orText,{color:theme.colors.text}]} id="orText">LUB</Text>
             <View style={styles.divider} />
           </View>
           <TouchableOpacity style={styles.googleButton} onPress={handleGoogleLogin}>
@@ -252,21 +252,21 @@ const Zelaskiewicz: React.FC = () => {
       )}
       {showRegistrationCheckForm && (
         <>
-        <View style={styles.passwordContainer}>
+        <View style={{}}>
 
  
           <TextInput
-            style={styles.passwordContainer}
+            style={{borderColor: theme.colors.primary, borderWidth: 1, height: 50, width: 300, marginBottom: 10, color: theme.colors.text}}
             placeholder="Adres e-mail"
             onChangeText={setEmail}
             value={email}
-            placeholderTextColor="black"
+            placeholderTextColor={theme.colors.text}
           />
           <TouchableOpacity style={styles.button} onPress={handleRegisterCheck}>
-            <Text style={styles.buttonText}>Kontynuuj</Text>
+            <Text style={{color: theme.colors.text, fontSize: 20, width: 150, textAlign: 'center'}}>Kontynuuj</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={toggleForms}>
-            <Text style={styles.buttonText}>Wróć</Text>
+            <Text style={{color: theme.colors.text, fontSize: 20, width: 150, textAlign: 'center'}}>Wróć</Text>
           </TouchableOpacity>
           </View>
         </>
@@ -275,21 +275,21 @@ const Zelaskiewicz: React.FC = () => {
   <>
       <View style={styles.passwordContainer}>
     <TextInput
-      style={styles.input}
+      style={[styles.input,{color: theme.colors.text}]}
       placeholder="Adres e-mail"
       onChangeText={setEmail}
       value={email}
-      placeholderTextColor="black"
+      placeholderTextColor={theme.colors.text}
     />
 </View>
     <View style={styles.passwordContainer}>
             <TextInput
-              style={[styles.input, {flex: 1}]}
+              style={[styles.input, {flex: 1},{color: theme.colors.text},]}
               placeholder="Hasło"
               secureTextEntry={!passwordVisible}
               onChangeText={setPassword}
               value={password}
-              placeholderTextColor="black"
+              placeholderTextColor={theme.colors.text}
             />
             <TouchableOpacity onPress={togglePasswordVisibility} style={styles.visibilityToggle}>
             <Icon name={passwordVisible ? 'eye-off' : 'eye'} size={24} color="black" />
@@ -332,7 +332,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: 'gray',
   },
   header: {
     fontSize: 24,
@@ -353,7 +352,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
     width: '100%',
-    backgroundColor: 'gray',
   },
   visibilityToggle: {
     marginLeft: 10,
@@ -372,7 +370,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   registerText: {
-    color: 'blue',
     marginBottom: 10,
   },
   dividerContainer: {

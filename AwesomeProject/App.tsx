@@ -23,6 +23,10 @@ import tw from 'twrnc';
 import { Platform } from 'react-native';
 import SmsListener from '@ernestbies/react-native-android-sms-listener';
 import {PermissionsAndroid } from 'react-native';
+import Notifications from './Components/Settings/Pages/Notifications/Notifications';
+import Push_notif from './Components/Settings/Pages/Notifications/Push-notif';
+import Connected from './Components/Settings/Pages/APPS/Connected';
+import Mgmt from './Components/Settings/Pages/APPS/Mgmt';
 
 const SettingsStack = createNativeStackNavigator();
 
@@ -34,6 +38,10 @@ function SettingsStackScreen() {
       <SettingsStack.Screen name="Security" component={Security} />
       <SettingsStack.Screen name="Logout" component={Zelazkiewicz} options={{title: "Logowanie"}} />
       <SettingsStack.Screen name="SwitchAccount" component={Zelazkiewicz} />
+      <SettingsStack.Screen name="Notifications" component={Notifications} />
+      <SettingsStack.Screen name="Push_notif" component={Push_notif} />
+      <SettingsStack.Screen name="Connected" component={Connected} />
+      <SettingsStack.Screen name="Mgmt" component={Mgmt} />
     </SettingsStack.Navigator>
   );
 }
@@ -432,38 +440,57 @@ const Tab = createBottomTabNavigator();
 
 function App() {
   Mrowinski();
-  const scheme = useColorScheme();
+  const [isLoading, setIsLoading] = useState(true); // Loading state
+  const scheme = useColorScheme(); // Use color scheme for theme
+
+  useEffect(() => {
+    // Change the state after 5 seconds
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    // Show the loading screen without navigation bar and footer
+    return <Kordella />;
+  }
+
+  // Once loading is complete, render the navigation container
   return (
     <NavigationContainer theme={scheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
-      <Tab.Navigator initialRouteName="Home" >
-      <Tab.Screen 
-          name="Home" 
-          component={HomeScreen} 
+      <Tab.Navigator initialRouteName="Home">
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
           options={{
-            title: 'Strona Główna', tabBarLabel: undefined,
+            title: 'Strona Główna',
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="home" color={color} size={size} />
             ),
-          }} 
+          }}
         />
-         <Tab.Screen name="Nadzór Wiadomości" component={Switalski} options={{ title: 'Nadzór Wiadomości', 
-            tabBarIcon: ({ color, size }) => (
-              <MaterialIcons name="message" color={color} size={size} />
-            ), }} />
-            <Tab.Screen name="Assistant" component={Jacoszek} options={{ title: 'Asystent',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialIcons name="assistant" color={color} size={size} />
-            ), }} />
-<Tab.Screen name="Options" component={SettingsStackScreen} options={{ title: 'Ustawienia',
-    tabBarIcon: ({ color, size }) => (
-      <MaterialIcons name="settings" color={color} size={size} />
-    ), }} />
-
-
-
+        <Tab.Screen name="Nadzór Wiadomości" component={Switalski} options={{
+          title: 'Nadzór Wiadomości',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="message" color={color} size={size} />
+          ),
+        }} />
+        <Tab.Screen name="Assistant" component={Jacoszek} options={{
+          title: 'Asystent',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="assistant" color={color} size={size} />
+          ),
+        }} />
+        <Tab.Screen name="Options" component={SettingsStackScreen} options={{
+          title: 'Ustawienia',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="settings" color={color} size={size} />
+          ),
+        }} />
       </Tab.Navigator>
     </NavigationContainer>
- 
   );
 }
 

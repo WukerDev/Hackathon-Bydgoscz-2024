@@ -61,7 +61,7 @@ const Chat: React.FC = () => {
     }));
 
     try {
-      const response = await fetch('http://10.13.45.163:5000/sendToGPT', {
+      const response = await fetch('http://192.168.217.175:31647/sendToGPT', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

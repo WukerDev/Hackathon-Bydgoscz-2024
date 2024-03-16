@@ -16,7 +16,10 @@ type RootStackParamList = {
   Logout: undefined;
   SwitchAccount: undefined;
   Messages: undefined;
-  
+  Notifications: undefined;
+  Push_notif: undefined;
+  Connected: undefined;
+  Mgmt: undefined;
 };
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'Settings'>;
@@ -54,8 +57,8 @@ const settingsOptions: option[] = [
     label: 'Powiadomienia',
     icon: 'notifications-outline',
     subOptions: [
-      { id: '2-1', label: 'Alarmy email', icon: 'mail-outline', screenName: 'Messages'},
-      { id: '2-2', label: 'Powiadomienia push', icon: 'notifications-circle-outline', screenName: 'Messages'},
+      { id: '2-1', label: 'Alarmy email', icon: 'mail-outline', screenName: 'Notifications'},
+      { id: '2-2', label: 'Powiadomienia push', icon: 'notifications-circle-outline', screenName: 'Push_notif'},
     ],
   },
   {
@@ -63,8 +66,8 @@ const settingsOptions: option[] = [
     label: 'Nadzorowane Aplikacje',
     icon: 'apps-outline',
     subOptions: [
-      { id: '2-1', label: 'Połączone Konta', icon: 'mail-outline', screenName: 'Messages'},
-      { id: '2-2', label: 'Połączone Aplikacje', icon: 'notifications-circle-outline', screenName: 'Messages'},
+      { id: '2-1', label: 'Połączone Konta', icon: 'mail-outline', screenName: 'Connected'},
+      { id: '2-2', label: 'Połączone Aplikacje', icon: 'notifications-circle-outline', screenName: 'Mgmt'},
     ],
   },
   {
