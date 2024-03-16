@@ -112,7 +112,7 @@ function Mrowinski() {
     checkForLinks(message.body);
     detectSocialEngineeringAttempts(message.body);
     if(licznik > 0) {
-      showNotification('Warning', 'This message is suspicious');
+      showNotification('Uwaga', 'Ta wiadomość zawiera podejrzane treści!');
     }
   };
 
