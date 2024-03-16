@@ -104,7 +104,7 @@ const Settings: React.FC<Props> = ({ navigation }) => {
       <Text style={[styles.PageTitle,{color: theme.colors.text}]}>Ustawienia</Text>
       <View style={[styles.profileContainer, { backgroundColor: theme.colors.subTile, margin: 14, marginBottom: 50 }]}>
         <View style={styles.userNameContainer}>
-          <Text style={[styles.userNameText, { color: theme.colors.text }]}>_super_creeper_0783</Text>
+          <Text style={[styles.userNameText, { color: theme.colors.text }]}>Jacek Ziemniak</Text>
           <Text style={[styles.userDetailText, { color: theme.colors.text }]}>Profil</Text>
         </View>
         <Image
