@@ -11,6 +11,12 @@ const settingsOptions = [
   { id: '2', label: 'Notifications', icon: 'notifications-outline' },
   { id: '3', label: 'Privacy', icon: 'lock-closed-outline' },
   { id: '4', label: 'Help & Support', icon: 'help-circle-outline' },
+  { id: '1', label: 'Konto' },
+  { id: '2', label: 'Powiadomienia' },
+  { id: '3', label: 'Nadzorowane Aplikacje' },
+  { id: '4', label: 'Język' },  
+  { id: '5', label: 'Prywatność' },
+  { id: '6', label: 'Pomoc i wsparcie' },
   // Add more options here as needed
 ];
 
