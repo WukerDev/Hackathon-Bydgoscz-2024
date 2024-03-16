@@ -120,7 +120,7 @@ const Settings: React.FC<Props> = ({ navigation }) => {
       {settingsOptions.map((option) => (
         <React.Fragment key={option.id}>
           <TouchableOpacity 
-            style={[styles.optionContainer, {backgroundColor: "#2b2b2b", marginHorizontal: 14}]}
+            style={[styles.optionContainer, {backgroundColor: theme.colors.tile, marginHorizontal: 14}]}
             onPress={() => toggleExpandOption(option.id)}
           >
             <Icon name={option.icon} size={24} color={theme.colors.text} style={tw`mr-4`} />
@@ -129,7 +129,7 @@ const Settings: React.FC<Props> = ({ navigation }) => {
           {expandedOption === option.id && option.subOptions && option.subOptions.map((subOption) => (
             <TouchableOpacity key={subOption.id}
             onPress={() => handleNavigation(subOption.screenName as keyof RootStackParamList)}
-            style={[styles.optionSubContainer, {backgroundColor: "#3c3c3c", paddingLeft: 14}]}>
+            style={[styles.optionSubContainer, {backgroundColor: theme.colors.subTile, paddingLeft: 14}]}>
               <Icon name={subOption.icon} size={20} color={theme.colors.text} style={tw`mr-4`} />
               <Text style={[styles.optionText, { color: theme.colors.text }]}>{subOption.label}</Text>
             </TouchableOpacity>
