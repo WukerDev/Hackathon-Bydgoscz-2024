@@ -27,7 +27,7 @@ function SettingsStackScreen() {
       <SettingsStack.Screen name="SettingsMain" component={Settings} options={{ headerShown: false }} />
       <SettingsStack.Screen name="EditProfile" component={EditProfile} />
       <SettingsStack.Screen name="Security" component={Security} />
-      <SettingsStack.Screen name="Logout" component={Logout} />
+      <SettingsStack.Screen name="Logout" component={Zelazkiewicz} options={{title: "Logowanie"}} />
       <SettingsStack.Screen name="SwitchAccount" component={Zelazkiewicz} />
     </SettingsStack.Navigator>
   );
@@ -58,7 +58,7 @@ function App() {
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="assistant" color={color} size={size} />
             ), }} />
-<Tab.Screen name="Options" component={SettingsStackScreen} options={{ title: 'Settings',
+<Tab.Screen name="Options" component={SettingsStackScreen} options={{ title: 'Ustawienia',
     tabBarIcon: ({ color, size }) => (
       <MaterialIcons name="settings" color={color} size={size} />
     ), }} />
