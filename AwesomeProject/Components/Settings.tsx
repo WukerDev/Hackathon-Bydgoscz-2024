@@ -59,10 +59,10 @@ const settingsOptions: option[] = [
   {
     id: '2',
     label: 'Sklep',
-    icon: 'notifications-outline',
+    icon: 'bag-check',
     subOptions: [
-      { id: '2-1', label: 'Subskrybcja premium', icon: 'mail-outline', screenName: 'Subscription'},
-      { id: '2-2', label: 'Pakiety', icon: 'notifications-circle-outline', screenName: 'Packets'},
+      { id: '2-1', label: 'Subskrybcja premium', icon: 'bag-handle', screenName: 'Subscription'},
+      { id: '2-2', label: 'Pakiety', icon: 'bag-add', screenName: 'Packets'},
     ],
   },
   {
@@ -124,7 +124,7 @@ const Settings: React.FC<Props> = ({ navigation }) => {
       <Text style={[styles.PageTitle,{color: theme.colors.text}]}>Ustawienia</Text>
       <View style={[styles.profileContainer, { backgroundColor: theme.colors.subTile, margin: 14, marginBottom: 50 }]}>
         <View style={styles.userNameContainer}>
-          <Text style={[styles.userNameText, { color: theme.colors.text }]}>Jacek Ziemniak</Text>
+          <Text style={[styles.userNameText, { color: theme.colors.text }]}>krystian.kowalski@wp.pl</Text>
           <Text style={[styles.userDetailText, { color: theme.colors.text }]}>Profil</Text>
         </View>
         <Image

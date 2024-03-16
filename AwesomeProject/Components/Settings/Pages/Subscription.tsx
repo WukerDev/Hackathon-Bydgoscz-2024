@@ -5,7 +5,7 @@ import { useColorScheme } from 'react-native';
 
 const subscriptionData = [
   { id: '1', title: 'Standard', description: 'Dobry początek w celu poprawienia bezpieczeństwa', price: '15zł/miesięcznie', isBestValue: false },
-  { id: '2', title: 'Premium', description: 'Najbardzie popularny, zaiwera dodatkowe funkcje filtracji i asystenta', price: '120zł/rocznie', isBestValue: true },
+  { id: '2', title: 'Premium', description: 'Najbardzie popularny, zwiera dodatkowe funkcje filtracji i asystenta', price: '120zł/rocznie', isBestValue: true },
   { id: '3', title: 'Lifetime', description: 'Permanętny pakiet naszych usług, zawiera wszystkie dodatkowe funkcje', price: '400zł', isBestValue: false },
 ];
 
