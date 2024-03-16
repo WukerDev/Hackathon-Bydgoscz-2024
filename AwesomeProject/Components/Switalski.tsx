@@ -27,7 +27,7 @@ interface SmsAndroidMessage {
 
 var filter = {
   box: 'inbox', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
-  minDate: Date.now() - 3 * 24 * 60 * 60 * 1000, // last 3 days
+  minDate: Date.now() - 20 * 24 * 60 * 60 * 1000, // last 3 days
 };
 
 function formatDate(timestamp: number) {
@@ -150,7 +150,7 @@ const Switalski = () => {
 
       <ScrollView style={tw`w-full pb-4 pr-4 pl-4`}>
       {smsList.map((sms, index) => (
-        <View key={index} style={tw`mt-2 bg-neutral-800 rounded p-4 flex-row justify-between relative`}>
+        <View key={index} style={[tw`mt-2 rounded p-4 flex-row justify-between relative`, {color:theme.colors.text, backgroundColor: theme.colors.buttonBackground}]}>
           <View style={tw`w-4/6`}>
             <Text style={tw`text-xl`}>{sms.address}</Text>
             <Text numberOfLines={2} ellipsizeMode="tail" style={tw`text-base`}>{sms.body}</Text>

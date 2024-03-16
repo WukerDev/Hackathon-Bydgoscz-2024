@@ -4,8 +4,12 @@ import { showNotification } from '../src/notification';
 import tw from 'twrnc';
 import { Platform } from 'react-native';
 import SmsListener from '@ernestbies/react-native-android-sms-listener';
+import { color } from '@rneui/base';
+import { CustomDarkTheme,CustomLightTheme } from './Theme';
+import { useColorScheme } from 'react-native';
 
 const requestNotificationPermission = async () => {
+
   if (Platform.OS === "android") {
     try {
       PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS).then(
@@ -46,6 +50,8 @@ async function requestReadSmsPermission() {
 }
 
 function Mrowinski() {
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   const [selectedTime, setSelectedTime] = useState<string>('');
   requestNotificationPermission();
 
@@ -393,7 +399,7 @@ const checkForLinks = (message: string): void => {
         style={[tw`bg-blue-500 rounded-md p-3 m-2`, { alignSelf: 'center' }]}
         onPress={() => showNotification('Hello', 'This is a notification')}
       >
-        <Text style={tw`text-white`}>Schedule Notification</Text>
+        <Text style={{color: theme.colors.background}}>Schedule Notification</Text>
       </TouchableOpacity>
 
       </View>
