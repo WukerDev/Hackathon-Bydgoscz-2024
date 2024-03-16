@@ -33,7 +33,7 @@ function App() {
             ),
           }} 
         />
-         <Tab.Screen name="Messages" component={Settings} options={{ title: 'Messages',
+         <Tab.Screen name="Messages" component={Messages} options={{ title: 'Messages',
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="message" color={color} size={size} />
             ), }} />
