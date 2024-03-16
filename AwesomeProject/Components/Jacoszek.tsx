@@ -127,6 +127,7 @@ const Chat: React.FC = () => {
         <Button title="New Chat" onPress={clearChatHistory} />
       </View>
       <GiftedChat
+      renderComposer={renderComposer}
         messages={messages}
         isTyping={true} // Show the typing indicator
         onSend={(messagesToSend: IMessage[]) => onSend(messagesToSend)}
