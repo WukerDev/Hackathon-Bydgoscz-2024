@@ -5,10 +5,11 @@ export const CustomDarkTheme = {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,
-    background: '#1A1A1A',
-    card: '#121212',
-    text: '#ffffff',
-    primary: '#BB86FC',
+    background: '#333',
+    card: '#232323',
+    text: '#EEE',
+    primary: '#EEE',
+    buttonBackground: '#292929',
     // Customize other colors as needed
   },
 };
@@ -18,10 +19,11 @@ export const CustomLightTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: '#FFFFFF',
-    card: '#F8F9FA',
-    text: '#333333',
-    primary: '#6200EE',
+    background: '#CACACA',
+    card: '#E8E6E4',
+    text: '#343434',
+    primary: '#343434',
+    buttonBackground: '#E8E6E4',
     // Add or override other color properties as needed
   },
 };
