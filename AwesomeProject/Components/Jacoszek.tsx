@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
 import { GiftedChat, IMessage, Send } from 'react-native-gifted-chat';
-import { Button } from 'react-native';
+import { Button, View } from 'react-native';
 
 function Jacoszek() {
-  // Stan zawierający wiadomości
   const [messages, setMessages] = useState<IMessage[]>([]);
 
-  // Funkcja dodająca nową wiadomość
   const handleSend = (newMessages: IMessage[] = []) => {
     setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages));
   };
 
-  // Funkcja obsługująca wysyłanie sugerowanej wiadomości
   const handleSuggestedMessage = (text: string) => {
     handleSend([
       {
-        _id: Math.round(Math.random() * 1000000),
+        _id: Math.round(Math.random() * 1000000).toString(),
         text: text,
         createdAt: new Date(),
         user: {
@@ -26,22 +23,29 @@ function Jacoszek() {
   };
 
   return (
-    <GiftedChat
-      messages={messages}
-      onSend={handleSend}
-      user={{ _id: 1 }} // Identyfikator użytkownika - można dostosować do potrzeb
-      renderSend={props => (
-        <Send {...props}>
-          <Button title="Send" onPress={() => props.onSend && props.onSend({ text: props.text ? props.text.trim() : '' }, true)} />
-        </Send>
-      )}
-      renderActions={() => (
+    <View style={{ flex: 1 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 8 }}>
         <Button
-          title="Suggested Message"
-          onPress={() => handleSuggestedMessage('To jest sugerowana wiadomość')}
+          title="Suggested Message 1"
+          onPress={() => handleSuggestedMessage('To jest pierwsza sugerowana wiadomość')}
         />
-      )}
-    />
+        <Button
+          title="Suggested Message 2"
+          onPress={() => handleSuggestedMessage('To jest druga sugerowana wiadomość')}
+        />
+      </View>
+      <GiftedChat
+        messages={messages}
+        onSend={handleSend}
+        user={{ _id: 1 }}
+        renderSend={(props) => (
+          <Send {...props}>
+            <Button title="Send" onPress={() => props.onSend && props.onSend({ text: props.text ? props.text.trim() : '' }, true)} />
+          </Send>
+        )}
+        
+      />
+    </View>
   );
 }
 
