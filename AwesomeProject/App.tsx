@@ -28,7 +28,7 @@ function SettingsStackScreen() {
       <SettingsStack.Screen name="EditProfile" component={EditProfile} />
       <SettingsStack.Screen name="Security" component={Security} />
       <SettingsStack.Screen name="Logout" component={Logout} />
-      <SettingsStack.Screen name="SwitchAccount" component={SwitchAccount} />
+      <SettingsStack.Screen name="SwitchAccount" component={Zelazkiewicz} />
     </SettingsStack.Navigator>
   );
 }
@@ -62,14 +62,13 @@ function App() {
     tabBarIcon: ({ color, size }) => (
       <MaterialIcons name="settings" color={color} size={size} />
     ), }} />
-        <Tab.Screen name="Kordella" component={Kordella} />
-        <Tab.Screen name="Zelazkiewicz" component={Zelazkiewicz} />
-        <Tab.Screen name="Mrowinski" component={Mrowinski} />
+
 
 
 
       </Tab.Navigator>
     </NavigationContainer>
+ 
   );
 }
 

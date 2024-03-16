@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, StyleSheet } from 'react-native';
+import { View, Button, StyleSheet, Text } from 'react-native'; // Dodajemy Text
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 
@@ -16,6 +16,7 @@ const Chat: React.FC = () => {
   const colorScheme = useColorScheme();
   const theme = colorScheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   const [messages, setMessages] = useState<IMessage[]>([]);
+  const [loadingMessage, setLoadingMessage] = useState<string>(''); // Dodajemy stan dla aktualnej wiadomości ładowania
 
   useEffect(() => {
     loadChatHistory();
@@ -52,6 +53,8 @@ const Chat: React.FC = () => {
   const onSend = async (newMessages: IMessage[] = []) => {
     setMessages((previousMessages) => GiftedChat.append(previousMessages, newMessages));
 
+    setLoadingMessage('Asystent pisze...'); // Ustawiamy wiadomość ładowania podczas oczekiwania na odpowiedź z API
+
     const chatHistory = messages.concat(newMessages).map((msg) => ({
       role: msg.user._id === 1 ? 'user' : 'assistant',
       content: msg.text,
@@ -73,12 +76,13 @@ const Chat: React.FC = () => {
       const reply = await response.json();
 
       const messageParts = reply.content.split('. '); // Split the message by sentences for example
-      let totalDelay = 0;
 
-      messageParts.forEach((part: string | any[], index: number) => {
+      for (let index = 0; index < messageParts.length; index++) {
+        const part = messageParts[index];
+
         // Assuming a typing delay of 100ms per character, as an example
         const delay = index === 0 ? 0 : part.length * 100;
-        totalDelay += delay;
+
         setTimeout(() => {
           const receivedMessage: IMessage = {
             _id: Math.round(Math.random() * 1000000),
@@ -96,12 +100,14 @@ const Chat: React.FC = () => {
             return updatedMessages;
           });
 
-          
-          
-        }, totalDelay); // Use the calculated delay
-      });
+          if (index === messageParts.length - 1) {
+            setLoadingMessage(''); // Czyścimy wiadomość ładowania po otrzymaniu ostatniej części odpowiedzi z API
+          }
+        }, delay);
+      }
     } catch (error) {
       console.error('Error sending chat message:', error);
+      setLoadingMessage(''); // Czyścimy wiadomość ładowania w przypadku błędu
     }
   };
 
@@ -125,8 +131,11 @@ const Chat: React.FC = () => {
         isTyping={true} // Show the typing indicator
         onSend={(messagesToSend: IMessage[]) => onSend(messagesToSend)}
         user={{ _id: 1 }}
-        renderFooter={() => null} // Typing indicator managed via isTyping prop
-        renderComposer={renderComposer}
+        renderFooter={() => (
+          <View style={styles.loadingIndicator}>
+            <Text>{loadingMessage}</Text> 
+          </View>
+        )} // Umieszczamy wiadomość ładowania na dole ekranu
       />
     </View>
   );
@@ -135,7 +144,11 @@ const Chat: React.FC = () => {
 const styles = StyleSheet.create({
   newChatButton: {
     padding: 10,
-    paddingTop: 30, // Adjust as necessary for your app's layout
+    paddingTop: 20, // Dodajemy odstęp na górze, aby przycisk nie nakładał się na animację ładowania
+  },
+  loadingIndicator: {
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   // ... other styles you may have ...
 });
