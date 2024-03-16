@@ -28,7 +28,7 @@ function App() {
         />
          <Tab.Screen name="Messeges" component={Settings} options={{ title: 'Messeges',
             tabBarIcon: ({ color, size }) => (
-              <MaterialIcons name="messages" color={color} size={size} />
+              <MaterialIcons name="message" color={color} size={size} />
             ), }} />
         <Tab.Screen name="Options" component={Settings} options={{ title: 'Settings',
             tabBarIcon: ({ color, size }) => (
