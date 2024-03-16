@@ -14,6 +14,8 @@ export const CustomDarkTheme = {
     icon: '#FFF',
     primary: '#EEE',
     buttonBackground: '#292929',
+    secondary: '#FFA500',
+    green: '#00FF00',
     // Customize other colors as needed
   },
 };
@@ -32,6 +34,9 @@ export const CustomLightTheme = {
     icon: '#343434',
     primary: '#343434',
     buttonBackground: '#E8E6E4',
+    secondary: '#FFA500',
+    greed: '#00FF00',
+
     // Add or override other color properties as needed
   },
 };

@@ -21,6 +21,8 @@ type RootStackParamList = {
   Push_notif: undefined;
   Connected: undefined;
   Mgmt: undefined;
+  Store: undefined;
+  Connect: undefined;
 };
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'Settings'>;
@@ -67,8 +69,8 @@ const settingsOptions: option[] = [
     label: 'Nadzorowane Aplikacje',
     icon: 'apps-outline',
     subOptions: [
-      { id: '2-1', label: 'Połączone Konta', icon: 'mail-outline', screenName: 'Connected'},
-      { id: '2-2', label: 'Połączone Aplikacje', icon: 'notifications-circle-outline', screenName: 'Mgmt'},
+      { id: '2-1', label: 'Połączone Konta', icon: 'mail-outline', screenName: 'Mgmt'},
+      { id: '2-2', label: 'Połączone Aplikacje', icon: 'notifications-circle-outline', screenName: 'Connect'},
     ],
   },
   {
