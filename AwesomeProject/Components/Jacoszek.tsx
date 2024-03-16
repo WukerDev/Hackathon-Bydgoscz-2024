@@ -44,6 +44,8 @@ const Chat: React.FC = () => {
   const onSend = async (newMessages: IMessage[] = []) => {
     setMessages((previousMessages) => GiftedChat.append(previousMessages, newMessages));
 
+    setIsTyping(true); // Rozpoczęcie animacji isTyping
+    
     const chatHistory = messages.concat(newMessages).map((msg) => ({
       role: msg.user._id === 1 ? 'user' : 'assistant',
       content: msg.text,
@@ -64,8 +66,7 @@ const Chat: React.FC = () => {
 
       const reply = await response.json();
 
-      // Start typing indicator
-      setIsTyping(true);
+      setIsTyping(true); // Rozpoczęcie animacji isTyping
       
       const messageParts = reply.content.split('. '); // Split the message by sentences for example
       let totalDelay = 0;
