@@ -5,7 +5,7 @@ import { useColorScheme } from 'react-native';
 
 const subscriptionData = [
   { id: '1', title: 'Standard', description: 'Dobry początek w celu poprawienia bezpieczeństwa', price: '15zł/miesięcznie', isBestValue: false },
-  { id: '2', title: 'Premium', description: 'Najbardzie popularny, zaiwera dodatkowe funkcje filtracji i asystenta', price: '120zł/rocznie', isBestValue: true },
+  { id: '2', title: 'Premium', description: 'Najbardzie popularny, zwiera dodatkowe funkcje filtracji i asystenta', price: '120zł/rocznie', isBestValue: true },
   { id: '3', title: 'Lifetime', description: 'Permanętny pakiet naszych usług, zawiera wszystkie dodatkowe funkcje', price: '400zł', isBestValue: false },
 ];
 
@@ -21,7 +21,7 @@ const Subscription: React.FC = () => {
           tier.isBestValue ? styles.bestValueTier : {}, 
           { borderColor: theme.colors.primary }
         ]}>
-          {tier.isBestValue && <Text style={styles.bestValueBadge}>BEST VALUE</Text>}
+          {tier.isBestValue && <Text style={styles.bestValueBadge}>OKAZJA</Text>}
           <Text style={[styles.title, { color: theme.colors.text }]}>{tier.title}</Text>
           <Text style={[styles.description, { color: theme.colors.text }]}>{tier.description}</Text>
           <Text style={[styles.price, { color: theme.colors.primary }]}>{tier.price}</Text>
