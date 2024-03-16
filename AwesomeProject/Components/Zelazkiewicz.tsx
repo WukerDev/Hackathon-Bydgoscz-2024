@@ -1,13 +1,28 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, useColorScheme } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { SHA512 } from 'crypto-js';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { CustomDarkTheme, CustomLightTheme } from './Theme';
+import tw from 'twrnc';
 
+const signIn = async () => {
+  try {
+    await GoogleSignin.hasPlayServices();
+    const userInfo = await GoogleSignin.signIn();
+    // You can now use userInfo object which contains user's information
+    console.log(userInfo);
+  } catch (error) {
+    console.log(error);
+  }
+};
 GoogleSignin.configure({
-  webClientId: '737570657274-f089gc9a0j6qoi6ki8upek9g80qoif6c.apps.googleusercontent.com', // Zastąp swoim rzeczywistym identyfikatorem klienta web
+  webClientId: '737570657274-f089gc9a0j6qoi6ki8upek9g80qoif6c.apps.googleusercontent.com',
+  offlineAccess: true, // Jeśli potrzebujesz tokena odświeżania
+  scopes: ['https://www.googleapis.com/auth/userinfo.email'], // Przykładowy zakres dostępu do Google Drive API
 });
 
-const baseURL = 'http://192.168.35.175:5000'; // Zastąp swoim rzeczywistym adresem API
+const baseURL = 'http://192.168.35.175:5000';
 
 interface UserCredentials {
   userName: string;
@@ -64,26 +79,56 @@ const addUser = async (username: string, password: string) => {
 
 async function login({ userName, password }: UserCredentials): Promise<void> {
   try {
-    const response = await axios.post(`${baseURL}/login`, {
-      userName,
-      password,
+    const hashedPassword = hashPassword(password);
+    const response = await fetch(`${baseURL}/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userName: userName, password: hashedPassword }),
     });
-    console.log(response.data);
-    Alert.alert('Logowanie zakończone sukcesem', 'Zalogowałeś się pomyślnie.');
+    const data = await response.json();
+    if (data['login']) {
+      Alert.alert('Logowanie zakończone sukcesem', 'Zalogowałeś się pomyślnie.');
+    } else {
+      Alert.alert('Logowanie nieudane', 'Niepoprawny email lub hasło.');
+    }
   } catch (error) {
     console.error('Błąd logowania:', error);
-    Alert.alert('Logowanie nieudane', 'Niepoprawny email lub hasło.');
+    Alert.alert('Logowanie nieudane', 'Wystąpił błąd podczas próby logowania.');
   }
 }
+const handleGoogleLogin = async (): Promise<void> => {
+  try {
+    await GoogleSignin.hasPlayServices();
+    const userInfo = await GoogleSignin.signIn();
+    // Tu można uzyskać token odświeżania jeśli jest potrzebny
+    const tokens = await GoogleSignin.getTokens(); // Pobranie tokenów dostępu i odświeżania
+
+    // Przykład użycia tokena dostępu do wykonania zapytania do Google API
+    const response = await fetch('https://www.googleapis.com/drive/v3/about', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+    const data = await response.json();
+    console.log(data);
+
+    console.log(userInfo);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const Zelaskiewicz: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState<string>(''); // Przeniesiono do wnętrza komponentu
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showLoginForm, setShowLoginForm] = useState<boolean>(true);
   const [showRegistrationForm, setShowRegistrationForm] = useState<boolean>(false);
-  const [passwordVisible, setPasswordVisible] = useState<boolean>(false); // New state for toggling password visibility
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState<boolean>(false); // For the confirm password field
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState<boolean>(false);
   const [showRegistrationCheckForm, setShowRegistrationCheckForm] = useState<boolean>(false);
 
   const handleGoogleLogin = async (): Promise<void> => {
@@ -151,12 +196,12 @@ const Zelaskiewicz: React.FC = () => {
     setShowRegistrationCheckForm(false);
     setShowRegistrationForm(true);
   };
-
+  const scheme = useColorScheme();
+  const theme = scheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   return (
     <View style={styles.container}>
       {showLoginForm && (
         <>
-          <Text style={styles.header}>Witaj ponownie</Text>
           <TextInput
             style={styles.input}
             placeholder="Adres e-mail"
@@ -164,14 +209,19 @@ const Zelaskiewicz: React.FC = () => {
             value={email}
             placeholderTextColor="black"
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Hasło"
-            secureTextEntry={true}
-            onChangeText={setPassword}
-            value={password}
-            placeholderTextColor="black"
-          />
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={[styles.input, {flex: 1}]}
+              placeholder="Hasło"
+              secureTextEntry={!passwordVisible}
+              onChangeText={setPassword}
+              value={password}
+              placeholderTextColor="black"
+            />
+            <TouchableOpacity onPress={togglePasswordVisibility} style={styles.visibilityToggle}>
+              <Icon name={passwordVisible ? 'eye-off' : 'eye'} size={24} color="black" />
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity style={styles.button} onPress={handleManualLogin}>
             <Text style={styles.buttonText}>Kontynuuj</Text>
           </TouchableOpacity>
@@ -221,27 +271,29 @@ const Zelaskiewicz: React.FC = () => {
             <TextInput
               style={[styles.input, {flex: 1}]}
               placeholder="Hasło"
-              secureTextEntry={!passwordVisible} // Toggle based on state
+              secureTextEntry={!passwordVisible}
               onChangeText={setPassword}
               value={password}
               placeholderTextColor="black"
             />
             <TouchableOpacity onPress={togglePasswordVisibility} style={styles.visibilityToggle}>
-  <Text>{passwordVisible ? 'Hide' : 'Show'}</Text>
+            <Icon name={passwordVisible ? 'eye-off' : 'eye'} size={24} color="black" />
 </TouchableOpacity>
+
           </View>
           <View style={styles.passwordContainer}>
             <TextInput
               style={[styles.input, {flex: 1}]}
               placeholder="Potwierdź hasło"
-              secureTextEntry={!confirmPasswordVisible} // Toggle based on state
+              secureTextEntry={!confirmPasswordVisible}
               onChangeText={setConfirmPassword}
               value={confirmPassword}
               placeholderTextColor="black"
             />
             <TouchableOpacity onPress={toggleConfirmPasswordVisibility} style={styles.visibilityToggle}>
-              <Text>{confirmPasswordVisible ? 'Hide' : 'Show'}</Text>
-            </TouchableOpacity>
+            <Icon name={confirmPasswordVisible ? 'eye-off' : 'eye'} size={24} color="black" />
+</TouchableOpacity>
+
           </View>
     <TouchableOpacity style={styles.button} onPress={handleRegister}>
       <Text style={styles.buttonText}>Zarejestruj</Text>
@@ -280,21 +332,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingLeft: 10,
     borderRadius: 5,
-    color: 'black', // Dodana właściwość color
+    color: 'black',
   },
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
-    width: '100%', // Ensure the container takes up full width
+    width: '100%',
   },
   visibilityToggle: {
-    // Example styling for the visibility toggle button
     marginLeft: 10,
     padding: 5,
   },
   button: {
-    backgroundColor: 'green',
+    backgroundColor: '#ff3333',
     width: '100%',
     padding: 15,
     borderRadius: 5,
@@ -324,8 +375,22 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   googleButton: {
-    // Styles for Google button, if needed
+    backgroundColor: '#4285F4', // Niebieski kolor Google
+    flexDirection: 'row', // Ikona i tekst będą w linii
+    justifyContent: 'center', // Centrowanie zawartości
+    alignItems: 'center', // Wyśrodkowanie zawartości w pionie
+    padding: 15, // Odpowiednie wypełnienie
+    borderRadius: 5, // Zaokrąglenie krawędzi
+    width: '100%', // Szerokość przycisku na całą dostępną szerokość
+    marginBottom: 10, // Margines od dolu
   },
+  googleButtonText: {
+    color: '#ffffff', // Biały tekst
+    fontSize: 18, // Rozmiar czcionki
+    fontWeight: 'bold', // Pogrubienie tekstu
+    marginLeft: 10, // Margines z lewej strony dla tekstu, aby zachować odstęp od ikony
+  },
+  
 });
 
 export default Zelaskiewicz;
