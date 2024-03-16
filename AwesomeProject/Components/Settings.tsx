@@ -104,7 +104,6 @@ const Settings: React.FC<Props> = ({ navigation }) => {
   const theme = useColorScheme() === 'dark' ? CustomDarkTheme : CustomLightTheme;
 
   const toggleExpandOption = (optionId: any) => {
-    // If the same option is clicked again, collapse it, otherwise expand the new one
     setExpandedOption(expandedOption === optionId ? null : optionId);
   };
   const handleNavigation = (screenName: keyof RootStackParamList) => {
@@ -112,12 +111,9 @@ const Settings: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <ScrollView style={[styles.scrollView, { backgroundColor: theme.colors.background }, {padding: 12}]}>
-      <TouchableOpacity style={[styles.profileContainer, {backgroundColor: "#2b2b2b"}]}>
-        <Image
-          style={styles.avatar}
-          source={userAvatar}
-        />
+    <ScrollView style={[styles.scrollView, { backgroundColor: theme.colors.background }]}>
+      <Text style={[styles.PageTitle,{color: theme.colors.text}]}>Ustawienia</Text>
+      <View style={[styles.profileContainer, { backgroundColor: theme.colors.subTile, margin: 14, marginBottom: 50 }]}>
         <View style={styles.userNameContainer}>
           <Text style={[styles.userNameText, { color: theme.colors.text }]}>_super_creeper_0783</Text>
           <Text style={[styles.userDetailText, { color: theme.colors.text }]}>Profil</Text>
@@ -174,17 +170,46 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   userDetailText: {
-    ...tw`text-sm`,
-    color: '#333',
+    fontSize: 16,
+    marginTop: 4,
+  },
+  avatar: {
+    position: 'absolute',
+    right: 20,
+    bottom: 5,
+    width: 90,
+    height: 90,
+    borderRadius: 40, // Half of the width/height to make it round
   },
   optionContainer: {
-    ...tw`flex-row items-center p-4`,
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
   },
-  optionText:{
-    ...tw`text-lg`,
-    color: '#000',
-  } 
+  optionSubContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    marginLeft: 20,
+    marginRight: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  optionText: {
+    fontSize: 18,
+    color: CustomDarkTheme.colors.text,
+    marginLeft: 12, // Adjust as necessary
+  },
+  PageTitle: {
+    fontSize: 24,
+    textAlign: 'left',
+    marginTop: 20,
+    marginLeft: 20,
+    marginBottom: 10,
+  },
+  // ... (add any other necessary styles)
 });
 
 export default Settings;

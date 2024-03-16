@@ -9,6 +9,7 @@ import Kordella from './Components/Kordella';
 import Zelazkiewicz from './Components/Zelazkiewicz';
 import Mrowinski from './Components/Mrowinski';
 import Switalski from './Components/Switalski';
+import Kozakowski from './Components/Kozakowski';
 import { CustomDarkTheme, CustomLightTheme } from './Components/Theme'; 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -53,10 +54,10 @@ function App() {
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="message" color={color} size={size} />
             ), }} />
-        <Tab.Screen name="Options" component={Settings} options={{ title: 'Settings',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialIcons name="settings" color={color} size={size} />
-            ), }} />
+<Tab.Screen name="Options" component={SettingsStackScreen} options={{ title: 'Settings',
+    tabBarIcon: ({ color, size }) => (
+      <MaterialIcons name="settings" color={color} size={size} />
+    ), }} />
         <Tab.Screen name="Kozakowski" component={Kozakowski} />
         <Tab.Screen name="Jacoszek" component={Jacoszek} />
         <Tab.Screen name="Kordella" component={Kordella} />
