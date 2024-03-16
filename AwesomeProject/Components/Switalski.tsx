@@ -90,7 +90,7 @@ const Switalski = () => {
       <Text style={tw`text-lg font-bold`}>SMS List:</Text>
       <ScrollView style={tw`mt-4 w-full p-4`}>
         {smsList.map((sms, index) => (
-          <View key={index} style={tw`mt-2 bg-gray-200 rounded p-4 flex-row justify-between items-center`}>
+          <View key={index} style={tw`mt-2 rounded p-4 flex-row justify-between items-center`}>
             <View style={tw`w-4/6`}>
               <Text style={tw`text-xl`}>{sms.address}</Text>
               <Text style={tw`text-base`}>{sms.body}</Text>
