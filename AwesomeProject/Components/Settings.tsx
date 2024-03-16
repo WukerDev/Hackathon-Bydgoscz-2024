@@ -72,6 +72,11 @@ function Settings() {
   const scheme = useColorScheme();
   const theme = scheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
 
+  const toggleExpandOption = (optionId) => {
+    // If the same option is clicked again, collapse it, otherwise expand the new one
+    setExpandedOption(expandedOption === optionId ? null : optionId);
+  };
+
   return (
     <ScrollView style={[styles.scrollView, { backgroundColor: theme.colors.background }, {padding: 12}]}>
       <TouchableOpacity style={[styles.profileContainer, {backgroundColor: "#2b2b2b"}]}>
@@ -81,7 +86,7 @@ function Settings() {
         />
         <View style={styles.userNameContainer}>
           <Text style={[styles.userNameText, { color: theme.colors.text }]}>_super_creeper_0783</Text>
-          <Text style={[styles.userDetailText, { color: theme.colors.text }]}>Profil </Text>
+          <Text style={[styles.userDetailText, { color: theme.colors.text }]}>Profil</Text>
         </View>
         <Icon name="chevron-forward-outline" size={20} color="#C7C7CC" />
       </TouchableOpacity>
@@ -90,7 +95,7 @@ function Settings() {
         <React.Fragment key={option.id}>
           <TouchableOpacity 
             style={[styles.optionContainer, {backgroundColor: "#2b2b2b"}]}
-            onPress={() => setExpandedOption(expandedOption === option.id ? null : option.id)}
+            onPress={() => toggleExpandOption(option.id)}
           >
             <Icon name={option.icon} size={24} color={theme.colors.text} style={tw`mr-4`} />
             <Text style={[styles.optionText, { color: theme.colors.text }]}>{option.label}</Text>
@@ -106,6 +111,7 @@ function Settings() {
     </ScrollView>
   );
 }
+
 
 const styles = StyleSheet.create({
   scrollView: tw`flex-1`,
