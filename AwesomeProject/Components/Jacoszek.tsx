@@ -124,7 +124,7 @@ const Chat: React.FC = () => {
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.newChatButton}>
-        <Button title="New Chat" onPress={clearChatHistory} />
+        <Button title="Nowa Konwersacja" onPress={clearChatHistory} />
       </View>
       <GiftedChat
       renderComposer={renderComposer}
