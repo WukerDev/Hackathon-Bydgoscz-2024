@@ -1,8 +1,4 @@
-/* eslint-disable eol-last */
-/* eslint-disable curly */
-/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable quotes */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated, useColorScheme, Dimensions } from 'react-native';
 

@@ -1,4 +1,3 @@
-/* eslint-disable eol-last */
 import React, { useState } from 'react';
 import { View, Text, useColorScheme, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import tw from 'twrnc';

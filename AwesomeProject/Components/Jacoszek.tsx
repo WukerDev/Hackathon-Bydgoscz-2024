@@ -1,13 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { GiftedChat, Bubble,IMessage } from 'react-native-gifted-chat';
 import React, { useState, useEffect } from 'react';
-import { View, Button, StyleSheet, Text } from 'react-native'; // Dodajemy Text
+import { View, Button, StyleSheet, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GiftedChat, IMessage } from 'react-native-gifted-chat';
-
+import tinycolor from 'tinycolor2';
 
 import { CustomDarkTheme, CustomLightTheme } from './Theme';
 import { useColorScheme } from 'react-native';
-import { color } from '@rneui/base';
 
 import { Composer } from 'react-native-gifted-chat';
 
@@ -17,7 +15,7 @@ const Chat: React.FC = () => {
   const colorScheme = useColorScheme();
   const theme = colorScheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const [loadingMessage, setLoadingMessage] = useState<string>(''); // Dodajemy stan dla aktualnej wiadomości ładowania
+  const [loadingMessage, setLoadingMessage] = useState<string>('');
 
   useEffect(() => {
     loadChatHistory();
@@ -54,7 +52,7 @@ const Chat: React.FC = () => {
   const onSend = async (newMessages: IMessage[] = []) => {
     setMessages((previousMessages) => GiftedChat.append(previousMessages, newMessages));
 
-    setLoadingMessage('Asystent pisze...'); // Ustawiamy wiadomość ładowania podczas oczekiwania na odpowiedź z API
+    setLoadingMessage('Asystent pisze...');
 
     const chatHistory = messages.concat(newMessages).map((msg) => ({
       role: msg.user._id === 1 ? 'user' : 'assistant',
@@ -76,12 +74,10 @@ const Chat: React.FC = () => {
 
       const reply = await response.json();
 
-      const messageParts = reply.content.split('. '); // Split the message by sentences for example
+      const messageParts = reply.content.split('. ');
 
       for (let index = 0; index < messageParts.length; index++) {
         const part = messageParts[index];
-
-        // Assuming a typing delay of 100ms per character, as an example
         const delay = index === 0 ? 0 : part.length * 100;
 
         setTimeout(() => {
@@ -102,13 +98,13 @@ const Chat: React.FC = () => {
           });
 
           if (index === messageParts.length - 1) {
-            setLoadingMessage(''); // Czyścimy wiadomość ładowania po otrzymaniu ostatniej części odpowiedzi z API
+            setLoadingMessage('');
           }
         }, delay);
       }
     } catch (error) {
       console.error('Error sending chat message:', error);
-      setLoadingMessage(''); // Czyścimy wiadomość ładowania w przypadku błędu
+      setLoadingMessage('');
     }
   };
 
@@ -121,6 +117,31 @@ const Chat: React.FC = () => {
     />
   );
 
+  const renderBubble = (props: any) => {
+    let backgroundColor;
+
+    if (props.currentMessage.user._id === 1) { // Użytkownik
+      backgroundColor = 'red'; // Intensywny czerwony dla bąbli użytkownika
+    } else { // Odpowiedź
+      backgroundColor = tinycolor('red').lighten(25).toString(); // Czerwony, ale jaśniejszy dla odpowiedzi
+    }
+
+    return (
+    <Bubble
+        {...props}
+        wrapperStyle={{
+          right: {
+            backgroundColor: backgroundColor,
+          },
+        }}
+        textStyle={{
+          right: {
+            color: 'white',
+          },
+        }}
+      />
+    );
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -128,16 +149,17 @@ const Chat: React.FC = () => {
         <Button title="Nowa Konwersacja" onPress={clearChatHistory} />
       </View>
       <GiftedChat
-      renderComposer={renderComposer}
+        renderComposer={renderComposer}
+        renderBubble={renderBubble}
         messages={messages}
-        isTyping={true} // Show the typing indicator
+        isTyping={true}
         onSend={(messagesToSend: IMessage[]) => onSend(messagesToSend)}
         user={{ _id: 1 }}
         renderFooter={() => (
           <View style={styles.loadingIndicator}>
-            <Text>{loadingMessage}</Text> 
+            <Text>{loadingMessage}</Text>
           </View>
-        )} // Umieszczamy wiadomość ładowania na dole ekranu
+        )}
       />
     </View>
   );
@@ -146,13 +168,11 @@ const Chat: React.FC = () => {
 const styles = StyleSheet.create({
   newChatButton: {
     padding: 10,
-
   },
   loadingIndicator: {
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
-  // ... other styles you may have ...
 });
 
 export default Chat;

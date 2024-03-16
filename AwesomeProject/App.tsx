@@ -1,7 +1,4 @@
 /* eslint-disable react/no-unstable-nested-components */
-/* eslint-disable keyword-spacing */
-/* eslint-disable quotes */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
 import { NavigationContainer} from '@react-navigation/native';
 import { useColorScheme } from 'react-native';
