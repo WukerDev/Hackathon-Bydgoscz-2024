@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, useColorScheme } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { SHA512 } from 'crypto-js';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { CustomDarkTheme, CustomLightTheme } from './Theme';
+import tw from 'twrnc';
 
 GoogleSignin.configure({
   webClientId: '737570657274-f089gc9a0j6qoi6ki8upek9g80qoif6c.apps.googleusercontent.com', // Zastąp swoim rzeczywistym identyfikatorem klienta web
@@ -64,15 +67,23 @@ const addUser = async (username: string, password: string) => {
 
 async function login({ userName, password }: UserCredentials): Promise<void> {
   try {
-    const response = await axios.post(`${baseURL}/login`, {
-      userName,
-      password,
+    const hashedPassword = hashPassword(password);
+    const response = await fetch(`${baseURL}/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userName: userName, password: hashedPassword }),
     });
-    console.log(response.data);
-    Alert.alert('Logowanie zakończone sukcesem', 'Zalogowałeś się pomyślnie.');
+    const data = await response.json();
+    if (data['login']) {
+      Alert.alert('Logowanie zakończone sukcesem', 'Zalogowałeś się pomyślnie.');
+    } else {
+      Alert.alert('Logowanie nieudane', 'Niepoprawny email lub hasło.');
+    }
   } catch (error) {
     console.error('Błąd logowania:', error);
-    Alert.alert('Logowanie nieudane', 'Niepoprawny email lub hasło.');
+    Alert.alert('Logowanie nieudane', 'Wystąpił błąd podczas próby logowania.');
   }
 }
 
@@ -151,12 +162,12 @@ const Zelaskiewicz: React.FC = () => {
     setShowRegistrationCheckForm(false);
     setShowRegistrationForm(true);
   };
-
+  const scheme = useColorScheme();
+  const theme = scheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   return (
     <View style={styles.container}>
       {showLoginForm && (
         <>
-          <Text style={styles.header}>Witaj ponownie</Text>
           <TextInput
             style={styles.input}
             placeholder="Adres e-mail"
@@ -164,14 +175,19 @@ const Zelaskiewicz: React.FC = () => {
             value={email}
             placeholderTextColor="black"
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Hasło"
-            secureTextEntry={true}
-            onChangeText={setPassword}
-            value={password}
-            placeholderTextColor="black"
-          />
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={[styles.input, {flex: 1}]}
+              placeholder="Hasło"
+              secureTextEntry={!passwordVisible} // Toggle based on state
+              onChangeText={setPassword}
+              value={password}
+              placeholderTextColor="black"
+            />
+            <TouchableOpacity onPress={togglePasswordVisibility} style={styles.visibilityToggle}>
+              <Icon name={passwordVisible ? 'eye-off' : 'eye'} size={24} color="black" />
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity style={styles.button} onPress={handleManualLogin}>
             <Text style={styles.buttonText}>Kontynuuj</Text>
           </TouchableOpacity>
@@ -227,8 +243,9 @@ const Zelaskiewicz: React.FC = () => {
               placeholderTextColor="black"
             />
             <TouchableOpacity onPress={togglePasswordVisibility} style={styles.visibilityToggle}>
-  <Text>{passwordVisible ? 'Hide' : 'Show'}</Text>
+            <Icon name={passwordVisible ? 'eye-off' : 'eye'} size={24} color="black" />
 </TouchableOpacity>
+
           </View>
           <View style={styles.passwordContainer}>
             <TextInput
@@ -240,8 +257,9 @@ const Zelaskiewicz: React.FC = () => {
               placeholderTextColor="black"
             />
             <TouchableOpacity onPress={toggleConfirmPasswordVisibility} style={styles.visibilityToggle}>
-              <Text>{confirmPasswordVisible ? 'Hide' : 'Show'}</Text>
-            </TouchableOpacity>
+            <Icon name={confirmPasswordVisible ? 'eye-off' : 'eye'} size={24} color="black" />
+</TouchableOpacity>
+
           </View>
     <TouchableOpacity style={styles.button} onPress={handleRegister}>
       <Text style={styles.buttonText}>Zarejestruj</Text>
@@ -286,10 +304,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
-    width: '100%', // Ensure the container takes up full width
+    width: '100%',
   },
   visibilityToggle: {
-    // Example styling for the visibility toggle button
     marginLeft: 10,
     padding: 5,
   },
