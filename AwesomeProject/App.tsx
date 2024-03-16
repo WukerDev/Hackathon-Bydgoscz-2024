@@ -31,8 +31,9 @@ import Notifications from './Components/Settings/Pages/Notifications/Notificatio
 import Push_notif from './Components/Settings/Pages/Notifications/Push-notif';
 import Connected from './Components/Settings/Pages/APPS/Connected';
 import Mgmt from './Components/Settings/Pages/APPS/Mgmt';
-import Store from './Components/Settings/Pages/Store';
 import Connect from './Components/Settings/Pages/Connected';
+import Subscription from './Components/Settings/Pages/Subscription';
+import Packets from './Components/Settings/Pages/Packets';
 
 const SettingsStack = createNativeStackNavigator();
 
@@ -48,7 +49,8 @@ function SettingsStackScreen() {
       <SettingsStack.Screen name="Push_notif" component={Push_notif} />
       <SettingsStack.Screen name="Connected" component={Connected} />
       <SettingsStack.Screen name="Mgmt" component={Mgmt} />
-      <SettingsStack.Screen name="Store" component={Store} />
+      <SettingsStack.Screen name="Subscription" component={Subscription} options={{title: "Subskrybcja"}} />
+      <SettingsStack.Screen name="Packets" component={Packets} options={{title: "Pakiety"}} />
       <SettingsStack.Screen name="Connect" component={Connect} options={{title: "Połączone"}}/>
     </SettingsStack.Navigator>
   );

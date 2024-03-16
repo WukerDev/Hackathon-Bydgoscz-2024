@@ -23,6 +23,8 @@ type RootStackParamList = {
   Mgmt: undefined;
   Store: undefined;
   Connect: undefined;
+  Subscription: undefined;
+  Packets: undefined;
 };
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'Settings'>;
@@ -57,43 +59,52 @@ const settingsOptions: option[] = [
   },
   {
     id: '2',
-    label: 'Powiadomienia',
+    label: 'Sklep',
     icon: 'notifications-outline',
     subOptions: [
-      { id: '2-1', label: 'Alarmy email', icon: 'mail-outline', screenName: 'Notifications'},
-      { id: '2-2', label: 'Powiadomienia push', icon: 'notifications-circle-outline', screenName: 'Push_notif'},
+      { id: '2-1', label: 'Subskrybcja premium', icon: 'mail-outline', screenName: 'Subscription'},
+      { id: '2-2', label: 'Pakiety', icon: 'notifications-circle-outline', screenName: 'Packets'},
     ],
   },
   {
     id: '3',
-    label: 'Nadzorowane Aplikacje',
-    icon: 'apps-outline',
+    label: 'Powiadomienia',
+    icon: 'notifications-outline',
     subOptions: [
-      { id: '2-1', label: 'Połączone Konta', icon: 'mail-outline', screenName: 'Mgmt'},
-      { id: '2-2', label: 'Połączone Aplikacje', icon: 'notifications-circle-outline', screenName: 'Connect'},
+      { id: '3-1', label: 'Alarmy email', icon: 'mail-outline', screenName: 'Notifications'},
+      { id: '3-2', label: 'Powiadomienia push', icon: 'notifications-circle-outline', screenName: 'Push_notif'},
     ],
   },
   {
     id: '4',
+    label: 'Nadzorowane Aplikacje',
+    icon: 'apps-outline',
+    subOptions: [
+      { id: '4-1', label: 'Połączone Konta', icon: 'mail-outline', screenName: 'Mgmt'},
+      { id: '4-2', label: 'Połączone Aplikacje', icon: 'notifications-circle-outline', screenName: 'Connect'},
+    ],
+  },
+  {
+    id: '5',
     label: 'Język aplikacji',
     icon: 'language-outline',
   },
   {
-    id: '5',
+    id: '6',
     label: 'Prywatność',
     icon: 'lock-closed-outline',
     subOptions: [
-      { id: '5-1', label: 'Blokady', icon: 'person-add-outline', screenName: 'Messages'},
-      { id: '5-2', label: 'Historia', icon: 'time-outline', screenName: 'Messages'},
+      { id: '6-1', label: 'Blokady', icon: 'person-add-outline', screenName: 'Messages'},
+      { id: '6-2', label: 'Historia', icon: 'time-outline', screenName: 'Messages'},
     ],
   },
   {
-    id: '6',
+    id: '7',
     label: 'Pomoc i wsparcie',
     icon: 'help-circle-outline',
     subOptions: [
-      { id: '6-1', label: 'Centrum pomocy', icon: 'information-circle-outline', screenName: 'Messages'},
-      { id: '6-2', label: 'Zgłoś problem', icon: 'bug-outline', screenName: 'Messages'},
+      { id: '7-1', label: 'Centrum pomocy', icon: 'information-circle-outline', screenName: 'Messages'},
+      { id: '7-2', label: 'Zgłoś problem', icon: 'bug-outline', screenName: 'Messages'},
     ],
   },
   // Add more options here as needed
