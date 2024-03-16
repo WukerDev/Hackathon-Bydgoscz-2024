@@ -44,19 +44,19 @@ function App() {
           name="Home" 
           component={HomeScreen} 
           options={{
-            title: 'Home',
+            title: 'Strona Główna',
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="home" color={color} size={size} />
             ),
           }} 
         />
-         <Tab.Screen name="Messages" component={Switalski} options={{ title: 'Messages',
+         <Tab.Screen name="Nadzór Wiadomości" component={Switalski} options={{ title: 'Nadzór Wiadomości',
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="message" color={color} size={size} />
             ), }} />
-            <Tab.Screen name="Assistant" component={Jacoszek} options={{ title: 'Assistant',
+            <Tab.Screen name="Assistant" component={Jacoszek} options={{ title: 'Asystent Bezpieczeństwa',
             tabBarIcon: ({ color, size }) => (
-              <MaterialIcons name="message" color={color} size={size} />
+              <MaterialIcons name="assistant" color={color} size={size} />
             ), }} />
 <Tab.Screen name="Options" component={SettingsStackScreen} options={{ title: 'Settings',
     tabBarIcon: ({ color, size }) => (
