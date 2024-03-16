@@ -19,9 +19,9 @@ interface SmsMessage {
 }
 
 interface SmsAndroidMessage {
-  address: string;
+  originatingAddress: string;
   body: string;
-  date: number;
+  timestamp: number;
   dangerLevel: number;
 }
 
@@ -89,10 +89,28 @@ const Switalski = () => {
   const currentTheme = useColorScheme();
   const theme = currentTheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   const [smsList, setSmsList] = useState<SmsAndroidMessage[]>([]);
-  const [receivedMessage, setReceivedMessage] = useState<SmsMessage | null>(null);
+  const [receivedMessage, setReceivedMessage] = useState<SmsAndroidMessage>(null);
   let initialButtonTitles;
   const [buttonTitles, setButtonTitles] = useState<string[]>([]);
 
+  function fetchMsg() {
+    SmsAndroid.list(
+      JSON.stringify(filter),
+      (fail: string) => {
+        console.log("Failed with this error: " + fail);
+      },
+      (count: number, smsListString: string) => {
+        // Here, we explicitly assert the type of the parsed JSON to be an array of SmsAndroidMessage
+        const arr: SmsAndroidMessage[] = JSON.parse(smsListString) as SmsAndroidMessage[];
+        arr.forEach(smsMsg => {
+          smsCalculateDangerLevel(smsMsg);
+        });
+        const initialButtonTitles = arr.map(() => "Zgłoś");
+        setButtonTitles(initialButtonTitles);
+        setSmsList(arr);
+      }
+    );
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,33 +121,24 @@ const Switalski = () => {
       }
 
       // Permission granted, continue with other operations
-      const listener = SmsListener.addListener((message: SmsMessage) => {
-        setReceivedMessage({
+      const listener = SmsListener.addListener((message: SmsAndroidMessage) => {
+        const newReceivedMessage = {
           originatingAddress: message.originatingAddress,
           body: message.body,
           timestamp: message.timestamp,
-        });
+          dangerLevel: 0
+        };
 
-        //analiza otrzymanej wiadomosci
+
+        // Update receivedMessage
+        setReceivedMessage(newReceivedMessage);
+        fetchMsg();
+
+        // Perform analysis of the received message
       });
 
       // Fetching SMS messages
-      SmsAndroid.list(
-        JSON.stringify(filter),
-        (fail: string) => {
-          console.log("Failed with this error: " + fail);
-        },
-        (count: number, smsListString: string) => {
-          // Here, we explicitly assert the type of the parsed JSON to be an array of SmsAndroidMessage
-          const arr: SmsAndroidMessage[] = JSON.parse(smsListString) as SmsAndroidMessage[];
-          arr.forEach(smsMsg => {
-            smsCalculateDangerLevel(smsMsg);
-          });
-          const initialButtonTitles = arr.map(() => "Zgłoś");
-          setButtonTitles(initialButtonTitles);
-          setSmsList(arr);
-        }
-      );
+      fetchMsg();
     };
 
     fetchData();
@@ -150,18 +159,12 @@ const Switalski = () => {
   const [selectedRating, setSelectedRating] = useState(2);
   return (
     <View style={tw`flex-1 items-center justify-center w-full`}>
-      {receivedMessage && (
-        <View style={tw`mt-4`}>
-          <Text>Originating Address: {receivedMessage.originatingAddress}</Text>
-          <Text>Body: {receivedMessage.body}</Text>
-          <Text>Timestamp: {formatDate(receivedMessage.timestamp)}</Text>
-        </View>
-      )}
+     
 
-<ScrollView style={tw`w-full pb-4 pr-4 pl-4`}>
+      <ScrollView style={tw`w-full pb-4 pr-4 pl-4`}>
         {smsList.map((sms, index) => (
-          <View key={index} style={[tw`mt-2 rounded p-4 flex-row justify-between relative`,{color: theme.colors.text, backgroundColor: theme.colors.buttonBackground}]}>
-            
+          <View key={index} style={[tw`mt-2 rounded p-4 flex-row justify-between relative`, { color: theme.colors.text, backgroundColor: theme.colors.buttonBackground }]}>
+
             <View style={tw`w-4/6`}>
               <Text style={tw`text-xl`}>{sms.address}</Text>
               <Text numberOfLines={2} ellipsizeMode="tail" style={tw`text-base`}>{sms.body}</Text>
@@ -175,7 +178,7 @@ const Switalski = () => {
             </View>
             <View style={tw`absolute bottom-3 w-26 right-4`}>
               <Button title={buttonTitles[index]}
-                disabled={buttonTitles[index] =="Zgłoszony"}
+                disabled={buttonTitles[index] == "Zgłoszony"}
                 onPress={() => {
                   const updatedButtonTitles = [...buttonTitles]; // Create a copy of buttonTitles
                   updatedButtonTitles[index] = "Zgłoszony"; // Update the title of the pressed button
