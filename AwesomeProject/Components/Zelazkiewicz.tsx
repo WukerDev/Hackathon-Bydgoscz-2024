@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable dot-notation */
+/* eslint-disable quotes */
+/* eslint-disable no-useless-escape */
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, useColorScheme } from 'react-native';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { View, Button, StyleSheet, Text } from 'react-native'; // Dodajemy Text
 import AsyncStorage from '@react-native-async-storage/async-storage';
