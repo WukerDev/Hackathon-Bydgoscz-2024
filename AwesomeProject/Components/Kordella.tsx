@@ -1,9 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Animated, View, StyleSheet } from 'react-native';
+import { Animated, View, StyleSheet, useColorScheme } from 'react-native';
+
+import { CustomLightTheme, CustomDarkTheme } from './Theme';
 
 const logoImage = require('../shared/logo_alpha.png');
 
 const Kordella = () => {
+  const scheme = useColorScheme();
+  const theme = scheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
   const opacity = useRef(new Animated.Value(0)).current;
   const scale = useRef(new Animated.Value(1)).current;
   const borderScale = useRef(new Animated.Value(0)).current;
@@ -28,7 +32,7 @@ const Kordella = () => {
     const borderAnimation = Animated.timing(borderScale, {
       toValue: textWidth,
       duration: 1000,
-      useNativeDriver: false, // Note: useNativeDriver should be false for non-transform properties.
+      useNativeDriver: false,
     });
 
     const imageAnimations = Animated.parallel([
@@ -44,12 +48,10 @@ const Kordella = () => {
       }),
     ]);
 
-    // Sequence the animations
     Animated.sequence([
-      textAnimations, // Start text animations immediately
-      borderAnimation, // Then start the border animation
-      //Animated.delay(500), // Wait for the border animation to complete
-      imageAnimations, // Finally, start the image animations
+      textAnimations,
+      borderAnimation,
+      imageAnimations,
     ]).start();
   }, [textWidth]);
 
@@ -58,27 +60,30 @@ const Kordella = () => {
     transform: [{ scale }],
   };
 
+  // Define styles here to access theme
+  const dynamicStyles = getDynamicStyles(theme);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
+    <View style={dynamicStyles.container}>
+      <View style={dynamicStyles.content}>
         <Animated.Text
-          style={[styles.logoText, textStyle]}
+          style={[dynamicStyles.logoText, textStyle]}
           onLayout={(event) => {
             const { width } = event.nativeEvent.layout;
-            if (textWidth === 0) setTextWidth(width*2); // Correctly set the width for borderScale
+            if (textWidth === 0) setTextWidth(width*2);
           }}
         >
           OwlGuard
         </Animated.Text>
-        <Animated.View style={[styles.border, { width: borderScale }]} />
+        <Animated.View style={[dynamicStyles.border, { width: borderScale }]} />
         <Animated.Image
           source={logoImage}
           resizeMode="contain"
-          style={[styles.logoImage, {
+          style={[dynamicStyles.logoImage, {
             opacity: imageOpacity,
             transform: [{ translateY: imageY.interpolate({
                 inputRange: [0, 1],
-                outputRange: [-50, 0], // Adjust based on desired final position
+                outputRange: [-50, 0],
               }) 
             }]
           }]}
@@ -88,31 +93,34 @@ const Kordella = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#333',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  content: {
-    alignItems: 'center',
-  },
-  logoText: {
-    color: '#EEE',
-    fontWeight: 'bold',
-    fontSize: 32,
-  },
-  border: {
-    height: 15,
-    backgroundColor: '#EEE',
-    marginTop: 35,
-  },
-  logoImage: {
-    width: 150,
-    height: 150,
-    marginTop: 20,
-  },
-});
+// Use a function to return styles that depend on the theme
+function getDynamicStyles(theme: any) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background, // Example usage of theme
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    content: {
+      alignItems: 'center',
+    },
+    logoText: {
+      color: theme.colors.text, // Accessing theme colors
+      fontWeight: 'bold',
+      fontSize: 32,
+    },
+    border: {
+      height: 15,
+      backgroundColor: theme.colors.primary,
+      marginTop: 35,
+    },
+    logoImage: {
+      width: 150,
+      height: 150,
+      marginTop: 20,
+    },
+  });
+}
 
 export default Kordella;
