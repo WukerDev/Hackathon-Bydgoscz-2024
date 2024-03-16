@@ -22,7 +22,7 @@ GoogleSignin.configure({
   scopes: ['https://www.googleapis.com/auth/userinfo.email'], // Przykładowy zakres dostępu do Google Drive API
 });
 
-const baseURL = 'http://192.168.35.175:5000';
+const baseURL = 'http://frog01-41647.wykr.es';
 
 interface UserCredentials {
   userName: string;
@@ -31,7 +31,7 @@ interface UserCredentials {
 
 const checkUser = async (username: string): Promise<boolean> => {
   try {
-    const response = await fetch('http://192.168.35.175:5000/checkIfExist', {
+    const response = await fetch('http://frog01-41647.wykr.es/checkIfExist', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ const isValidEmail = (email: any) => {
 const addUser = async (username: string, password: string) => {
   const hashedPassword = hashPassword(password);
   try {
-    const response = await fetch('http://192.168.35.175:5000/addUser', {
+    const response = await fetch('http://frog01-41647.wykr.es/addUser', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
