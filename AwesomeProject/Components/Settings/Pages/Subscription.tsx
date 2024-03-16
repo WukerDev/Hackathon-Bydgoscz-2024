@@ -21,7 +21,7 @@ const Subscription: React.FC = () => {
           tier.isBestValue ? styles.bestValueTier : {}, 
           { borderColor: theme.colors.primary }
         ]}>
-          {tier.isBestValue && <Text style={styles.bestValueBadge}>BEST VALUE</Text>}
+          {tier.isBestValue && <Text style={styles.bestValueBadge}>OKAZJA</Text>}
           <Text style={[styles.title, { color: theme.colors.text }]}>{tier.title}</Text>
           <Text style={[styles.description, { color: theme.colors.text }]}>{tier.description}</Text>
           <Text style={[styles.price, { color: theme.colors.primary }]}>{tier.price}</Text>
