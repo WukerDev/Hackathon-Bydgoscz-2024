@@ -14,7 +14,25 @@ import Mrowinski from './Components/Mrowinski';
 import { CustomDarkTheme, CustomLightTheme } from './Components/Theme'; 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import EditProfile from './Components/Settings/Pages/Account/EditProfile';
+import Security from './Components/Settings/Pages/Account/Security';
+import Logout from './Components/Settings/Pages/Account/Logout';
+import SwitchAccount from './Components/Settings/Pages/Account/SwitchAccount';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+const SettingsStack = createNativeStackNavigator();
+
+function SettingsStackScreen() {
+  return (
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen name="SettingsMain" component={Settings} options={{ headerShown: false }} />
+      <SettingsStack.Screen name="EditProfile" component={EditProfile} />
+      <SettingsStack.Screen name="Security" component={Security} />
+      <SettingsStack.Screen name="Logout" component={Logout} />
+      <SettingsStack.Screen name="SwitchAccount" component={SwitchAccount} />
+    </SettingsStack.Navigator>
+  );
+}
 
 const Tab = createBottomTabNavigator();
 
@@ -37,10 +55,11 @@ function App() {
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="message" color={color} size={size} />
             ), }} />
-        <Tab.Screen name="Options" component={Settings} options={{ title: 'Settings',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialIcons name="settings" color={color} size={size} />
-            ), }} />
+<Tab.Screen name="Options" component={SettingsStackScreen} options={{ title: 'Settings',
+    tabBarIcon: ({ color, size }) => (
+      <MaterialIcons name="settings" color={color} size={size} />
+    ), }} />
+
         <Tab.Screen name="Kozakowski" component={Kozakowski} />
         <Tab.Screen name="Jacoszek" component={Jacoszek} />
         <Tab.Screen name="Kordella" component={Kordella} />
