@@ -6,11 +6,23 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { CustomDarkTheme, CustomLightTheme } from './Theme';
 import tw from 'twrnc';
 
+const signIn = async () => {
+  try {
+    await GoogleSignin.hasPlayServices();
+    const userInfo = await GoogleSignin.signIn();
+    // You can now use userInfo object which contains user's information
+    console.log(userInfo);
+  } catch (error) {
+    console.log(error);
+  }
+};
 GoogleSignin.configure({
-  webClientId: '737570657274-f089gc9a0j6qoi6ki8upek9g80qoif6c.apps.googleusercontent.com', // Zastąp swoim rzeczywistym identyfikatorem klienta web
+  webClientId: '737570657274-f089gc9a0j6qoi6ki8upek9g80qoif6c.apps.googleusercontent.com',
+  offlineAccess: true, // Jeśli potrzebujesz tokena odświeżania
+  scopes: ['https://www.googleapis.com/auth/userinfo.email'], // Przykładowy zakres dostępu do Google Drive API
 });
 
-const baseURL = 'http://192.168.35.175:5000'; // Zastąp swoim rzeczywistym adresem API
+const baseURL = 'http://192.168.35.175:5000';
 
 interface UserCredentials {
   userName: string;
@@ -86,15 +98,37 @@ async function login({ userName, password }: UserCredentials): Promise<void> {
     Alert.alert('Logowanie nieudane', 'Wystąpił błąd podczas próby logowania.');
   }
 }
+const handleGoogleLogin = async (): Promise<void> => {
+  try {
+    await GoogleSignin.hasPlayServices();
+    const userInfo = await GoogleSignin.signIn();
+    // Tu można uzyskać token odświeżania jeśli jest potrzebny
+    const tokens = await GoogleSignin.getTokens(); // Pobranie tokenów dostępu i odświeżania
+
+    // Przykład użycia tokena dostępu do wykonania zapytania do Google API
+    const response = await fetch('https://www.googleapis.com/drive/v3/about', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+    const data = await response.json();
+    console.log(data);
+
+    console.log(userInfo);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const Zelaskiewicz: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState<string>(''); // Przeniesiono do wnętrza komponentu
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showLoginForm, setShowLoginForm] = useState<boolean>(true);
   const [showRegistrationForm, setShowRegistrationForm] = useState<boolean>(false);
-  const [passwordVisible, setPasswordVisible] = useState<boolean>(false); // New state for toggling password visibility
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState<boolean>(false); // For the confirm password field
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState<boolean>(false);
   const [showRegistrationCheckForm, setShowRegistrationCheckForm] = useState<boolean>(false);
 
   const handleGoogleLogin = async (): Promise<void> => {
@@ -179,7 +213,7 @@ const Zelaskiewicz: React.FC = () => {
             <TextInput
               style={[styles.input, {flex: 1}]}
               placeholder="Hasło"
-              secureTextEntry={!passwordVisible} // Toggle based on state
+              secureTextEntry={!passwordVisible}
               onChangeText={setPassword}
               value={password}
               placeholderTextColor="black"
@@ -237,7 +271,7 @@ const Zelaskiewicz: React.FC = () => {
             <TextInput
               style={[styles.input, {flex: 1}]}
               placeholder="Hasło"
-              secureTextEntry={!passwordVisible} // Toggle based on state
+              secureTextEntry={!passwordVisible}
               onChangeText={setPassword}
               value={password}
               placeholderTextColor="black"
@@ -251,7 +285,7 @@ const Zelaskiewicz: React.FC = () => {
             <TextInput
               style={[styles.input, {flex: 1}]}
               placeholder="Potwierdź hasło"
-              secureTextEntry={!confirmPasswordVisible} // Toggle based on state
+              secureTextEntry={!confirmPasswordVisible}
               onChangeText={setConfirmPassword}
               value={confirmPassword}
               placeholderTextColor="black"
@@ -298,7 +332,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingLeft: 10,
     borderRadius: 5,
-    color: 'black', // Dodana właściwość color
+    color: 'black',
   },
   passwordContainer: {
     flexDirection: 'row',
@@ -311,7 +345,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   button: {
-    backgroundColor: 'green',
+    backgroundColor: '#ff3333',
     width: '100%',
     padding: 15,
     borderRadius: 5,
@@ -341,8 +375,22 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   googleButton: {
-    // Styles for Google button, if needed
+    backgroundColor: '#4285F4', // Niebieski kolor Google
+    flexDirection: 'row', // Ikona i tekst będą w linii
+    justifyContent: 'center', // Centrowanie zawartości
+    alignItems: 'center', // Wyśrodkowanie zawartości w pionie
+    padding: 15, // Odpowiednie wypełnienie
+    borderRadius: 5, // Zaokrąglenie krawędzi
+    width: '100%', // Szerokość przycisku na całą dostępną szerokość
+    marginBottom: 10, // Margines od dolu
   },
+  googleButtonText: {
+    color: '#ffffff', // Biały tekst
+    fontSize: 18, // Rozmiar czcionki
+    fontWeight: 'bold', // Pogrubienie tekstu
+    marginLeft: 10, // Margines z lewej strony dla tekstu, aby zachować odstęp od ikony
+  },
+  
 });
 
 export default Zelaskiewicz;
