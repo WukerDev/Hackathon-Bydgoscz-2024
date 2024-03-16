@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated, useColorScheme, Dimensions } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import LinearGradient from 'react-native-linear-gradient'; // Ensure you have this imported
 
 import { CustomDarkTheme, CustomLightTheme } from './Theme';
 
+import { NavigationProp } from '@react-navigation/native';
+
 const { width } = Dimensions.get('window');
-const buttonSize = width / 2; // To make them square and fit 2 per row.
+const buttonSize = width / 2; // To make them square and fit 2 per row
 var threadCount = 6; // Replace with actual thread count
 const securityTips = [
   { text: "Włącz 2FA (uwierzytelnianie dwuskładnikowe) na wszystkich kontach, aby znacząco zwiększyć bezpieczeństwo.", link: "https://example.com/2fa" },
@@ -38,15 +40,12 @@ const HomeScreen = ({ navigation }) => {
   const theme = scheme === 'dark' ? CustomDarkTheme : CustomLightTheme;
 
   useEffect(() => {
-    // Function to select 3 random tips
     const selectTips = () => {
       const shuffled = [...securityTips].sort(() => 0.5 - Math.random());
       setCurrentTips(shuffled.slice(0, 3));
     };
 
-    selectTips(); // Select initial tips
-
-    // Breathing animation for the ring
+    selectTips();
     const animationLoop = Animated.loop(
       Animated.sequence([
         Animated.timing(animation, {
@@ -63,18 +62,21 @@ const HomeScreen = ({ navigation }) => {
     );
 
     animationLoop.start();
+    const interval = setInterval(selectTips, 15000);
 
-    const interval = setInterval(selectTips, 15000); // Change tips every 15 seconds
-
-    // Clean up function
     return () => {
       clearInterval(interval);
       animationLoop.stop();
     };
   }, [animation]);
-  function setTherad(params:number) {
-    threadCount = params;
-  }
+
+  const getCircleColor = (count) => {
+    if (count === 0) return 'green';
+    if (count === 1) return 'blue';
+    if (count >= 2 && count <= 5) return 'yellow';
+    return 'red';
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Text style={[styles.dangerText, { color: theme.colors.text }]}>ZAGROŻENIA:</Text>
@@ -83,43 +85,27 @@ const HomeScreen = ({ navigation }) => {
           styles.ring,
           {
             borderColor: getCircleColor(threadCount),
-            transform: [
-              {
-                scale: animation.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [1, 1.1],
-                }),
-              },
-            ],
+            transform: [{ scale: animation.interpolate({ inputRange: [0, 1], outputRange: [1, 1.05] }) }],
           },
         ]}
       >
-        <Text style={{ color: getCircleColor(threadCount), fontSize: 60 }}>{threadCount}</Text>
+        <Text style={{ color: getCircleColor(threadCount), fontSize: 50, marginBottom: 5 }}>{threadCount}</Text>
       </Animated.View>
+      <LinearGradient start={{x: 1, y:0}} end={{x:0, y:0}} colors={['#252525', theme.colors.background]} style={styles.gradientBackground}>
       {currentTips.map((tip, index) => (
-        <TouchableOpacity
-          key={index}
-          style={[styles.tipButton, { backgroundColor: theme.colors.card }]}
-          onPress={() => tip.link && console.log(`Opening link for: ${tip.text}`)}
-        >
-          <Text style={[styles.tipText, { color: theme.colors.text }]}>{tip.text}</Text>
+        <TouchableOpacity key={index} style={styles.tipButton} onPress={() => tip.link && console.log(`Opening link for: ${tip.text}`)}>
+            <Text style={[styles.tipText, { color: theme.colors.text, textAlign: 'center' }]}>{tip.text}</Text>
         </TouchableOpacity>
       ))}
+      </LinearGradient>
       <TouchableOpacity
-        style={[styles.fixButton, { backgroundColor: theme.colors.accent }]}
-        onPress={() => setTherad(0) }
+        style={[styles.fixButton, { backgroundColor: theme.colors.accent}]}
+        onPress={() => setThread(0)}
       >
         <Text style={[styles.fixButtonText, { color: theme.colors.text }]}>Napraw Wszystko</Text>
       </TouchableOpacity>
     </View>
   );
-};
-
-const getCircleColor = (threadCount) => {
-  if (threadCount === 0) return 'green';
-  if (threadCount === 1) return 'blue';
-  if (threadCount >= 2 && threadCount <= 5) return 'yellow';
-  return 'red';
 };
 
 const styles = StyleSheet.create({
@@ -129,28 +115,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   ring: {
-    width: 150,
-    height: 150,
+    width: 120,
+    height: 120,
     borderRadius: 75,
-    borderWidth: 10,
+    borderWidth: 4,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20,
+    marginBottom: 40,
   },
   tipButton: {
     width: '90%',
-    borderRadius: 30,
-    padding: 15,
+    padding: 0, // Adjust padding in gradientBackground instead
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 10, // Added to separate buttons
+  },
+  gradientBackground: {
+    width: '100%',
+    padding: 15,
+    borderRadius: 5, // Apply borderRadius here for the gradient
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   tipText: {
     fontSize: 16,
-    color: CustomDarkTheme.colors.text,
   },
   dangerText: {
-    marginBottom: 10,
+    marginBottom: 40,
     fontSize: 20,
     fontWeight: 'bold',
   },
@@ -161,7 +152,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
-    color: CustomDarkTheme.colors.primary,
   },
   fixButtonText: {
     fontSize: 16,
@@ -170,3 +160,4 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
+

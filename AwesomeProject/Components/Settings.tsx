@@ -36,7 +36,7 @@ type option = {
   id: string;
   label: string;
   icon: string;
-  subOptions: subOption[];
+  subOptions?: subOption[];
 };
 
 const settingsOptions: option[] = [
@@ -45,10 +45,8 @@ const settingsOptions: option[] = [
     label: 'Konto',
     icon: 'person-circle-outline',
     subOptions: [
-      { id: '1-1', label: 'Edytuj profil', icon: 'create-outline', screenName: 'EditProfile'},
-      { id: '1-2', label: 'Bezpieczeństwo', icon: 'shield-checkmark-outline', screenName: 'Security'},
-      { id: '1-3', label: 'Wyloguj się', icon: 'log-out-outline', screenName: 'Logout'},
-      { id: '1-4', label: 'Przełącz konto', icon: 'swap-horizontal-outline', screenName: 'SwitchAccount'},
+      { id: '1-1', label: 'Bezpieczeństwo', icon: 'shield-checkmark-outline', screenName: 'Security'},
+      { id: '1-2', label: 'Wyloguj się', icon: 'log-out-outline', screenName: 'Logout'},
     ],
   },
   {
@@ -58,25 +56,17 @@ const settingsOptions: option[] = [
     subOptions: [
       { id: '2-1', label: 'Alarmy email', icon: 'mail-outline', screenName: 'Messages'},
       { id: '2-2', label: 'Powiadomienia push', icon: 'notifications-circle-outline', screenName: 'Messages'},
-      { id: '2-3', label: 'Dźwięki powiadomień', icon: 'musical-notes-outline', screenName: 'Messages'},
     ],
   },
   {
     id: '3',
     label: 'Nadzorowane Aplikacje',
     icon: 'apps-outline',
-    subOptions: [
-      { id: '3-1', label: 'Połączone Konta', icon: 'download-outline', screenName: 'Messages'},
-      { id: '3-2', label: 'Połączone Aplikacje', icon: 'cloud-download-outline', screenName: 'Messages'},
-    ],
   },
   {
     id: '4',
-    label: 'Język',
+    label: 'Język aplikacji',
     icon: 'language-outline',
-    subOptions: [
-      { id: '4-1', label: 'Język aplikacji', icon: 'globe-outline', screenName: 'Messages'},
-    ],
   },
   {
     id: '5',
@@ -84,8 +74,7 @@ const settingsOptions: option[] = [
     icon: 'lock-closed-outline',
     subOptions: [
       { id: '5-1', label: 'Blokady', icon: 'person-add-outline', screenName: 'Messages'},
-      { id: '5-2', label: 'Prywatność', icon: 'eye-off-outline', screenName: 'Messages'},
-      { id: '5-3', label: 'Historia', icon: 'time-outline', screenName: 'Messages'},
+      { id: '5-2', label: 'Historia', icon: 'time-outline', screenName: 'Messages'},
     ],
   },
   {
