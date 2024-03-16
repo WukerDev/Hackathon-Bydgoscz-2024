@@ -114,7 +114,7 @@ const HomeScreen = ({ navigation }) => {
         style={[styles.fixButton, { backgroundColor: theme.colors.accent }]}
         onPress={() => setTherad(0) }
       >
-        <Text style={[styles.fixButtonText, { color: theme.colors.text }]}>Napraw Wszystko</Text>
+        <Text style={[styles.fixButtonText, { color: theme.colors.card }]}>Napraw Wszystko</Text>
       </TouchableOpacity>
     </View>
   );
