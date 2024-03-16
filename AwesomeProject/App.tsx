@@ -63,6 +63,7 @@ function App() {
         <Tab.Screen name="Kordella" component={Kordella} />
         <Tab.Screen name="Zelazkiewicz" component={Zelazkiewicz} />
         <Tab.Screen name="Mrowinski" component={Mrowinski} />
+        <Tab.Screen name="Switalski" component={Switalski} />
 
 
       </Tab.Navigator>
