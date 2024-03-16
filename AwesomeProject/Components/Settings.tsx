@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, useColorScheme, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import tw from 'twrnc';
 import { CustomDarkTheme, CustomLightTheme } from './Theme';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationProp } from '@react-navigation/native';
 
 const userAvatar = require('./Settings/avatar.png');
@@ -109,22 +109,41 @@ const settingsOptions: option[] = [
   // Add more options here as needed
 ];
 const Settings: React.FC<Props> = ({ navigation }) => {
+  const [email, setEmail] = useState(''); // Stan na przechowywanie emaila
+
   const [expandedOption, setExpandedOption] = useState(null);
   const theme = useColorScheme() === 'dark' ? CustomDarkTheme : CustomLightTheme;
-
+  useEffect(() => {
+    const getEmail = async () => {
+      const userEmail = await AsyncStorage.getItem('loggedInEmail');
+      setEmail(userEmail || 'Brak emaila');
+    };
+  
+    getEmail();
+  }, []);
+  
   const toggleExpandOption = (optionId: any) => {
     setExpandedOption(expandedOption === optionId ? null : optionId);
   };
   const handleNavigation = (screenName: keyof RootStackParamList) => {
     navigation.navigate(screenName);
   };
+  useEffect(() => {
+    const fetchEmail = async () => {
+      const savedEmail = await AsyncStorage.getItem('loggedInEmail');
+      if (savedEmail) {
+        setEmail(savedEmail);
+      }
+    };
 
+    fetchEmail();
+  }, []);
   return (
     <ScrollView style={[styles.scrollView, { backgroundColor: theme.colors.background }]}>
       <Text style={[styles.PageTitle,{color: theme.colors.text}]}>Ustawienia</Text>
       <View style={[styles.profileContainer, { backgroundColor: theme.colors.subTile, margin: 14, marginBottom: 50 }]}>
         <View style={styles.userNameContainer}>
-          <Text style={[styles.userNameText, { color: theme.colors.text }]}>Jacek Ziemniak</Text>
+          <Text style={[styles.userNameText, { color: theme.colors.text }]}>{email}</Text>
           <Text style={[styles.userDetailText, { color: theme.colors.text }]}>Profil</Text>
         </View>
         <Image

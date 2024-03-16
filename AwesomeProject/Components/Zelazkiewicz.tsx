@@ -5,6 +5,7 @@ import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-si
 import { SHA512 } from 'crypto-js';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CustomDarkTheme, CustomLightTheme } from './Theme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const signIn = async () => {
@@ -77,28 +78,7 @@ const addUser = async (username: string, password: string) => {
   }
 };
 
-async function login({ userName, password }: UserCredentials): Promise<void> {
-  try {
-    const hashedPassword = hashPassword(password);
-    const response = await fetch(`http://192.168.217.175:31647/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ userName: userName, password: hashedPassword }),
-    });
-    const data = await response.json();
-    if (data['login']) {
-      Alert.alert('Logowanie zakończone sukcesem', 'Zalogowałeś się pomyślnie.');
 
-    } else {
-      Alert.alert('Logowanie nieudane', 'Niepoprawny email lub hasło.');
-    }
-  } catch (error) {
-    console.error('Błąd logowania:', error);
-    Alert.alert('Logowanie nieudane', 'Wystąpił błąd podczas próby logowania.');
-  }
-}
 const handleGoogleLogin = async (): Promise<void> => {
   try {
     await GoogleSignin.hasPlayServices();
@@ -131,7 +111,31 @@ const Zelaskiewicz: React.FC = () => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState<boolean>(false);
   const [showRegistrationCheckForm, setShowRegistrationCheckForm] = useState<boolean>(false);
+  const [loggedInEmail, setLoggedInEmail] = useState<string>('');
 
+  const login = async ({ userName, password }: UserCredentials): Promise<void> => {
+    try {
+      const hashedPassword = hashPassword(password);
+      const response = await fetch(`http://192.168.217.175:31647/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userName: userName, password: hashedPassword }),
+      });
+      const data = await response.json();
+      if (data['login']) {
+        Alert.alert('Logowanie zakończone sukcesem', 'Zalogowałeś się pomyślnie.');
+        await AsyncStorage.setItem('loggedInEmail', userName); // Użyj await tutaj
+        setLoggedInEmail(userName);
+      } else {
+        Alert.alert('Logowanie nieudane', 'Niepoprawny email lub hasło.');
+      }
+    } catch (error) {
+      console.error('Błąd logowania:', error);
+      Alert.alert('Logowanie nieudane', 'Wystąpił błąd podczas próby logowania.');
+    }
+  };
   useEffect(() => {
     // Initialize Google Sign-In
     GoogleSignin.configure({
@@ -293,7 +297,7 @@ const Zelaskiewicz: React.FC = () => {
               placeholderTextColor={theme.colors.text}
             />
             <TouchableOpacity onPress={togglePasswordVisibility} style={styles.visibilityToggle}>
-            <Icon name={passwordVisible ? 'eye-off' : 'eye'} size={24} color="black" />
+            <Icon name={passwordVisible ? 'eye-off' : 'eye'} size={24} color="white" />
 </TouchableOpacity>
 
           </View>
@@ -304,10 +308,10 @@ const Zelaskiewicz: React.FC = () => {
               secureTextEntry={!confirmPasswordVisible}
               onChangeText={setConfirmPassword}
               value={confirmPassword}
-              placeholderTextColor="black"
+              placeholderTextColor="white"
             />
             <TouchableOpacity onPress={toggleConfirmPasswordVisibility} style={styles.visibilityToggle}>
-            <Icon name={confirmPasswordVisible ? 'eye-off' : 'eye'} size={24} color="black" />
+            <Icon name={confirmPasswordVisible ? 'eye-off' : 'eye'} size={24} color="white" />
 </TouchableOpacity>
 
           </View>
