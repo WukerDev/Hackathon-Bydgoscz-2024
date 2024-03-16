@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, PermissionsAndroid, Button, ScrollView, Alert } from 'react-native';
 import SmsListener from '@ernestbies/react-native-android-sms-listener';
 import SmsAndroid from "react-native-get-sms-android";
+import StarRating from './StarRating';
 import { Linking } from 'react-native';
 
 import tw from 'twrnc';
@@ -18,6 +19,7 @@ interface SmsAndroidMessage {
   address: string;
   body: string;
   date: number;
+  dangerLevel:number;
 }
 
 var filter = {
@@ -33,64 +35,64 @@ function formatDate(timestamp: number) {
 async function requestReadSmsPermission() {
   let grantedRead = false;
   let grantedReceive = false;
-  
+
 
   while (!grantedRead && !grantedReceive && shouldContinue) {
-      try {
-          grantedRead = await PermissionsAndroid.request(
-              PermissionsAndroid.PERMISSIONS.READ_SMS,
-          ) === PermissionsAndroid.RESULTS.GRANTED;
-          grantedReceive = await PermissionsAndroid.request(
-              PermissionsAndroid.PERMISSIONS.RECEIVE_SMS,
-          ) === PermissionsAndroid.RESULTS.GRANTED;
-          if (grantedRead && grantedReceive) {
-              console.log("SMS read/receive permissions granted");
-          } else {
-              console.log("SMS read/receive permissions not granted");
-              const AsyncAlert = async () => new Promise((resolve) => {
-                  Alert.alert(
-                      "Wymagane zezwolenie",
-                      "Ten komponent wymaga zezwolenia na odczytywanie wiadomości w celu ich weryfikacji.",
-                      [
-                          {
-                              text: 'OK',
-                              onPress: () => resolve('OK'),
-                          },
-                          {
-                              text: 'Idź do ustawień',
-                              onPress:  () => {
-                                  
-                                  shouldContinue = false; // Break from the loop
-                                  Linking.openSettings();
-                                   resolve('Idź do ustawie');
-                                  
-                              },
-                              style: 'cancel',
-                          },
-                      ],
-                      { cancelable: false },
-                  );
-              });
+    try {
+      grantedRead = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_SMS,
+      ) === PermissionsAndroid.RESULTS.GRANTED;
+      grantedReceive = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.RECEIVE_SMS,
+      ) === PermissionsAndroid.RESULTS.GRANTED;
+      if (grantedRead && grantedReceive) {
+        console.log("SMS read/receive permissions granted");
+      } else {
+        console.log("SMS read/receive permissions not granted");
+        const AsyncAlert = async () => new Promise((resolve) => {
+          Alert.alert(
+            "Wymagane zezwolenie",
+            "Ten komponent wymaga zezwolenia na odczytywanie wiadomości w celu ich weryfikacji.",
+            [
+              {
+                text: 'OK',
+                onPress: () => resolve('OK'),
+              },
+              {
+                text: 'Idź do ustawień',
+                onPress: () => {
 
-              await AsyncAlert();
-          }
-      } catch (err) {
-          console.warn(err);
+                  shouldContinue = false; // Break from the loop
+                  Linking.openSettings();
+                  resolve('Idź do ustawie');
+
+                },
+                style: 'cancel',
+              },
+            ],
+            { cancelable: false },
+          );
+        });
+
+        await AsyncAlert();
       }
+    } catch (err) {
+      console.warn(err);
+    }
   }
 }
 
 const Switalski = () => {
   const [smsList, setSmsList] = useState<SmsAndroidMessage[]>([]);
   const [receivedMessage, setReceivedMessage] = useState<SmsMessage | null>(null);
-  
+
 
   useEffect(() => {
     const fetchData = async () => {
       // Request permission
       await requestReadSmsPermission();
       if (!shouldContinue) {
-        return ;
+        return;
       }
 
       // Permission granted, continue with other operations
@@ -100,6 +102,8 @@ const Switalski = () => {
           body: message.body,
           timestamp: message.timestamp,
         });
+
+        //analiza otrzymanej wiadomosci
       });
 
       // Fetching SMS messages
@@ -111,6 +115,9 @@ const Switalski = () => {
         (count: number, smsListString: string) => {
           // Here, we explicitly assert the type of the parsed JSON to be an array of SmsAndroidMessage
           const arr: SmsAndroidMessage[] = JSON.parse(smsListString) as SmsAndroidMessage[];
+          arr.forEach(smsMsg => {
+            smsCalculateDangerLevel(smsMsg);
+          });
           setSmsList(arr);
         }
       );
@@ -122,7 +129,7 @@ const Switalski = () => {
   if (!shouldContinue) {
     return null;
   }
-
+  const [selectedRating, setSelectedRating] = useState(2);
   return (
     <View style={tw`flex-1 items-center justify-center w-full`}>
       {receivedMessage && (
@@ -132,23 +139,37 @@ const Switalski = () => {
           <Text>Timestamp: {formatDate(receivedMessage.timestamp)}</Text>
         </View>
       )}
-      <Text style={tw`text-lg font-bold`}>SMS List:</Text>
-      <ScrollView style={tw`mt-4 w-full p-4`}>
-        {smsList.map((sms, index) => (
-          <View key={index} style={tw`mt-2 bg-gray-200 rounded p-4 flex-row justify-between items-center`}>
-            <View style={tw`w-4/6`}>
-              <Text style={tw`text-xl`}>{sms.address}</Text>
-              <Text style={tw`text-base`}>{sms.body}</Text>
-              <Text style={tw`text-sm`}>{formatDate(sms.date)}</Text>
-            </View>
-            <View style={tw`rounded-full w-2/6 p-2`}>
-              <Button title="Report" onPress={() => { }} />
-            </View>
+      <View style={tw` mt-2  flex justify-between items-center`}>
+        <Text style={tw`text-lg font-bold`}>Lista SMS:</Text>
+      </View>
+
+      <ScrollView style={tw`w-full pb-4 pr-4 pl-4`}>
+      {smsList.map((sms, index) => (
+        <View key={index} style={tw`mt-2 bg-neutral-800 rounded p-4 flex-row justify-between relative`}>
+          <View style={tw`w-4/6`}>
+            <Text style={tw`text-xl`}>{sms.address}</Text>
+            <Text numberOfLines={2} ellipsizeMode="tail" style={tw`text-base`}>{sms.body}</Text>
+            <Text style={tw`text-sm`}>{formatDate(sms.date)}</Text>
           </View>
-        ))}
-      </ScrollView>
+          <View style={tw`absolute top-5 right-2`}>
+            <StarRating
+              rating={sms.dangerLevel}
+              onRatingChange={(rating) => setSelectedRating(rating)}
+            />
+          </View>
+          <View style={tw`absolute bottom-3 right-4`}>
+            <Button title="Zgłoś" onPress={() => { }} />
+          </View>
+        </View>
+      ))}
+    </ScrollView>
     </View>
   );
 };
 
 export default Switalski;
+
+function smsCalculateDangerLevel(smsMsg) {
+  smsMsg.dangerLevel = Math.floor(Math.random() * 6); // Generates a random integer between 0 and 5
+}
+
